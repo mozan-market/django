@@ -23,7 +23,7 @@
         {% for karma in karmas %}
         <div class="karmaWrapper">
             <a href="/users/{{ karma.user.username }}">
-                <img class="avatar" src="{{ ribbit.user.profile.gravatar_url }}">
+                <img class="avatar" src="{{ karma.user.profile.gravatar_url }}">
                 <span class="name">{{ karma.user.first_name }}</span>
             </a>
             @{{ karma.user.username }}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+ 
+{% block content %}
+    <div class="panel right">
+        <h1>Create a Post</h1>
+        <p>
+            <form action="/submit" method="post">
+            {% for field in karma_form %}{% csrf_token %}
+            {{ field }}
+            {% endfor %}
+            <input type="hidden" value="{{ next_url }}" name="next_url">
+            <input type="submit" value="Ribbit!">
+            </form>
+        </p>
+    </div>
+    <div class="panel left">
+        <h1>Public posts</h1>
+        {% for karma in karmas %}
+        <div class="ribbitWrapper">
+            <img class="avatar" src="{{ karma.user.profile.gravatar_url }}">
+            <span class="name">{{ karma.user.first_name }}</span>@{{ karma.user.username }}
+            <span class="time">{{ karma.creation_date|timesince }}</span>
+            <p>{{ karma.content }}</p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

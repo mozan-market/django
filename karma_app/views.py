@@ -55,3 +55,28 @@ def signup(request):
         else:
             return index(request, user_form=user_form)
     return redirect('/')
+
+from django.contrib.auth.decorators import login_required
+ 
+@login_required
+def submit(request):
+    if request.method == "POST":
+        karma_form = KarmaForm(data=request.POST)
+        next_url = request.POST.get("next_url", "/")
+        if karma_form.is_valid():
+            karma = karma_form.save(commit=False)
+            karma.user = request.user
+            karma.save()
+            return redirect(next_url)
+        else:
+            return public(request, ribbit_form)
+    return redirect('/')
+
+@login_required
+def public(request, karma_form=None):
+    karma_form = karma_form or KarmaForm()
+    posts = Karma.objects.reverse()[:10]
+    return render(request,
+                  'public.html',
+                  {'karma_form': karma_form, 'next_url': '/posts',
+                   'posts': posts, 'username': request.user.username})

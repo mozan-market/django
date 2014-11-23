@@ -13,4 +13,7 @@ urlpatterns = patterns('',
     url(r'^login$', 'karma_app.views.login_view'), # login
     url(r'^logout$', 'karma_app.views.logout_view'), # logout
     url(r'^signup$', 'karma_app.views.signup'), # signup
+    url(r'^posts$', 'karma_app.views.public'), # public posts
+    url(r'^submit$', 'karma_app.views.submit'), # submit new posts
 )
+  
