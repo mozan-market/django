@@ -80,3 +80,51 @@ def public(request, karma_form=None):
                   'public.html',
                   {'karma_form': karma_form, 'next_url': '/posts',
                    'posts': posts, 'username': request.user.username})
+
+from django.db.models import Count
+from django.http import Http404
+ 
+def get_latest(user):
+    try:
+        return user.karma_set.order_by('-id')[0]
+    except IndexError:
+        return ""
+ 
+ 
+@login_required
+def users(request, username="", karma_form=None):
+    if username:
+        # Show a profile
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise Http404
+        posts = Karma.objects.filter(user=user.id)
+        if username == request.user.username or request.user.profile.follows.filter(user__username=username):
+            # Self Profile or buddies' profile
+            return render(request, 'user.html', {'user': user, 'posts': posts, })
+        return render(request, 'user.html', {'user': user, 'posts': posts, 'follow': True, })
+    users = User.objects.all().annotate(posts_count=Count('post'))
+    posts = map(get_latest, users)
+    obj = zip(users, posts)
+    karma_form = karma_form or KarmaForm()
+    return render(request,
+                  'profiles.html',
+                  {'obj': obj, 'next_url': '/users/',
+                   'karma_form': karma_form,
+                   'username': request.user.username, })
+
+
+from django.core.exceptions import ObjectDoesNotExist
+ 
+@login_required
+def follow(request):
+    if request.method == "POST":
+        follow_id = request.POST.get('follow', False)
+        if follow_id:
+            try:
+                user = User.objects.get(id=follow_id)
+                request.user.profile.follows.add(user.profile)
+            except ObjectDoesNotExist:
+                return redirect('/users/')
+    return redirect('/users/')

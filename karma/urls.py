@@ -15,5 +15,9 @@ urlpatterns = patterns('',
     url(r'^signup$', 'karma_app.views.signup'), # signup
     url(r'^posts$', 'karma_app.views.public'), # public posts
     url(r'^submit$', 'karma_app.views.submit'), # submit new posts
+    url(r'^users/$', 'karma_app.views.users'),
+    url(r'^users/(?P<username>\w{0,30})/$', 'karma_app.views.users'),
+    url(r'^follow$', 'karma_app.views.follow'),
+
 )
   

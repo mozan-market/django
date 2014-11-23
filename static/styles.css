@@ -125,38 +125,38 @@ header div.wrapper #btnLogOut {
   height: 433px;
   float: right;
 }
-#content div.wrapper div.panel.right textarea.ribbitText {
+#content div.wrapper div.panel.right textarea.karmaText {
   width: 249px;
   height: 160px;
   border: 1px solid #d2d2d2;
 }
-#content div.wrapper div.panel.right textarea.ribbitText.error {
+#content div.wrapper div.panel.right textarea.karmaText.error {
   border: 1px solid #4C1717;
 }
 #content div.wrapper div.panel.left {
   width: 533px;
   float: left;
 }
-#content div.wrapper div.panel.left div.ribbitWrapper {
+#content div.wrapper div.panel.left div.karmaWrapper {
   padding: 15px 0;
   border-bottom: 1px solid #d2d2d2;
 }
-#content div.wrapper div.panel.left div.ribbitWrapper:last-child {
+#content div.wrapper div.panel.left div.karmaWrapper:last-child {
   border: none;
 }
-#content div.wrapper div.panel.left div.ribbitWrapper span.name {
+#content div.wrapper div.panel.left div.karmaWrapper span.name {
   font-size: 18px;
   color: #58B84E;
 }
-#content div.wrapper div.panel.left div.ribbitWrapper span.time {
+#content div.wrapper div.panel.left div.karmaWrapper span.time {
   font-size: 12px;
   color: #CCC;
 }
-#content div.wrapper div.panel.left div.ribbitWrapper img.avatar {
+#content div.wrapper div.panel.left div.karmaWrapper img.avatar {
   margin: 0 19px 0 20px;
   float: left;
 }
-#content div.wrapper div.panel.left div.ribbitWrapper p {
+#content div.wrapper div.panel.left div.karmaWrapper p {
   margin: 5px 50px 0 90px;
   padding: 0;
   text-align: justify;
@@ -164,7 +164,7 @@ header div.wrapper #btnLogOut {
   color: #3f3e3d;
   text-shadow: #3f3e3d 0 0 1px;
 }
-#content div.wrapper div.panel.left div.ribbitWrapper p span.spacing {
+#content div.wrapper div.panel.left div.karmaWrapper p span.spacing {
   padding-left: 9px;
   margin-left: 9px;
   height: 10px;
