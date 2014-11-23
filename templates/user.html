@@ -15,7 +15,7 @@
             </a>
                 @{{ user.username }}
             <p>
-                {{ ribbits.count }} Ribbits
+                {{ posts.count }} Posts
                 <span class="spacing">{{ user.profile.follows.all.count }} Following</span>
                 <span class="spacing">{{ user.profile.followed_by.all.count }} Followers</span>
             </p>
@@ -37,9 +37,9 @@
                 <img class="avatar" src="{{ user.profile.gravatar_url }}">
                 <span class="name">{{ karma.user.first_name }}</span>
             </a>
-            @{{ karma.user.username }}
-            <span class="time">{{ karma.creation_date|timesince }}</span>
-            <p>{{ karma.content }}</p>
+            @{{ post.user.username }}
+            <span class="time">{{ post.creation_date|timesince }}</span>
+            <p>{{ post.content }}</p>
         </div>
         {% endfor %}
     </div>

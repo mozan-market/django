@@ -82,7 +82,7 @@ header {
 header div.wrapper {
   padding: 11px 0;
 }
-header div.wrapper img {
+header div.wrapper h1 {
   position: relative;
   top: 10px;
   margin: 0 15px 0 0;

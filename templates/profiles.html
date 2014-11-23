@@ -23,11 +23,11 @@
             </a>
             @{{ user.username }}
             <p>
-                {{ user.ribbit_count}} Posts
+                {{ user.karma_count}} Posts
                 <span class="spacing">{{ user.profile.followed_by.count }} Followers</span>
                 <span class="spacing">{{ user.profile.follows.count }} Following</span>
             </p>
-            <p>{{ ribbit.content }}</p>
+            <p>{{ karma.content }}</p>
         </div>
         {% endfor %}
     </div>

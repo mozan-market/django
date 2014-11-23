@@ -69,7 +69,7 @@ def submit(request):
             karma.save()
             return redirect(next_url)
         else:
-            return public(request, ribbit_form)
+            return public(request, karma_form)
     return redirect('/')
 
 @login_required
@@ -104,7 +104,7 @@ def users(request, username="", karma_form=None):
             # Self Profile or buddies' profile
             return render(request, 'user.html', {'user': user, 'posts': posts, })
         return render(request, 'user.html', {'user': user, 'posts': posts, 'follow': True, })
-    users = User.objects.all().annotate(posts_count=Count('post'))
+    users = User.objects.all().annotate(posts_count=Count('karma'))
     posts = map(get_latest, users)
     obj = zip(users, posts)
     karma_form = karma_form or KarmaForm()
