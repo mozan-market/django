@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block login %}
+    {% with user.username as username %}
+        {{ block.super }}
+    {% endwith %}
+{% endblock %}
+ 
+{% block content %}
+    <div class="panel right">
+        <h1>Create a Post</h1>
+        <p>
+            <form action="/submit" method="post">
+            {% for field in karma_form %}{% csrf_token %}
+            {{ field }}
+            {% endfor %}
+            <input type="hidden" value="{{ next_url }}" name="next_url">
+            <input type="submit" value="Post it!">
+            </form>
+        </p>
+    </div>
+    <div class="panel left">
+        <h1>Buddies' Posts</h1>
+        {% for karma in karmas %}
+        <div class="karmaWrapper">
+            <a href="/users/{{ karma.user.username }}">
+                <img class="avatar" src="{{ ribbit.user.profile.gravatar_url }}">
+                <span class="name">{{ karma.user.first_name }}</span>
+            </a>
+            @{{ karma.user.username }}
+            <p>
+                {{ karma.content }}
+            </p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
