@@ -3,13 +3,11 @@ from django.contrib.auth.models import User
 import hashlib
 from django.core.files.storage import FileSystemStorage
 
-fs = FileSystemStorage(location='/media/images')
 class Karma(models.Model):
     content = models.CharField(max_length=140)
     user = models.ForeignKey(User)
     creation_date = models.DateTimeField(auto_now=True, blank=True)
-    images = models.ImageField(storage=fs, 
-                              upload_to='post_images/', 
+    images = models.ImageField(upload_to='post_images/', 
                               default = '',)
 
     
