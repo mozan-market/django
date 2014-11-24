@@ -198,6 +198,7 @@ footer {
 footer div.wrapper {
   padding: 15px;
 }
+footer div.wrapper a,
 footer div.wrapper img {
   float: right;
   margin-right: 5px;

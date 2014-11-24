@@ -38,6 +38,7 @@ class AuthenticateForm(AuthenticationForm):
     
 class KarmaForm(forms.ModelForm):
     content = forms.CharField(required=True, widget=forms.widgets.Textarea(attrs={'class': 'karmaText'}))
+    images = forms.ImageField(required=False)
  
     def is_valid(self):
         form = super(KarmaForm, self).is_valid()

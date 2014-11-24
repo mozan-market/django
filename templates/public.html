@@ -15,12 +15,12 @@
     </div>
     <div class="panel left">
         <h1>Public posts</h1>
-        {% for karma in karmas %}
-        <div class="ribbitWrapper">
-            <img class="avatar" src="{{ karma.user.profile.gravatar_url }}">
-            <span class="name">{{ karma.user.first_name }}</span>@{{ karma.user.username }}
-            <span class="time">{{ karma.creation_date|timesince }}</span>
-            <p>{{ karma.content }}</p>
+        {% for post in posts %}
+        <div class="karmaWrapper">
+            <img class="avatar" src="{{ post.user.profile.gravatar_url }}">
+            <span class="name">{{ post.user.first_name }}</span>@{{ post.user.username }}
+            <span class="time">{{ post.creation_date|timesince }}</span>
+            <p>{{ post.content }}</p>
         </div>
         {% endfor %}
     </div>

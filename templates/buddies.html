@@ -20,15 +20,21 @@
     </div>
     <div class="panel left">
         <h1>Buddies' Posts</h1>
-        {% for karma in karmas %}
-        <div class="karmaWrapper">
-            <a href="/users/{{ karma.user.username }}">
-                <img class="avatar" src="{{ karma.user.profile.gravatar_url }}">
-                <span class="name">{{ karma.user.first_name }}</span>
+        {% for post in posts %}
+        <div class="karmaWrapper"> 
+            <a href="/users/{{ post.user.username }}">
+                <img class="avatar" src="{{ post.user.profile.gravatar_url }}">
+                <span class="name">{{ post.user.first_name }}</span>
             </a>
-            @{{ karma.user.username }}
-            <p>
-                {{ karma.content }}
+            @{{ post.user.username }}
+            <p> 
+                {% if post.image %}
+                    {% for image in post.images %}
+                        <img src="{{ post.images.url }}">
+                    {% endfor %}
+                {% endif %}
+
+                {{ post.content }} 
             </p>
         </div>
         {% endfor %}

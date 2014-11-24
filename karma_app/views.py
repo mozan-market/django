@@ -7,17 +7,18 @@ from karma_app.models import Karma
 def index(request, auth_form=None, user_form=None):
     # User is logged in
     if request.user.is_authenticated():
-        karma_form = KarmaForm()
+        karma_form = KarmaForm(request.POST, request.FILES)
         user = request.user
-        karmas_self = Karma.objects.filter(user=user.id)
-        karmas_buddies = Karma.objects.filter(user__userprofile__in=user.profile.follows.all)
-        karmas = karmas_self | karmas_buddies
+        posts_self = Karma.objects.filter(user=user.id)
+        posts_buddies = Karma.objects.filter(user__userprofile__in=user.profile.follows.all)
+        posts = posts_self | posts_buddies
  
         return render(request,
                       'buddies.html',
-                      {'karma_form': karma_form, 'user': user,
-                       'karmas': karmas,
-                       'next_url': '/', })
+                      {'karma_form': karma_form, 
+                       'user': user,
+                       'posts': posts,
+                       'next_url': '/',})
     else:
         # User is not logged in
         auth_form = auth_form or AuthenticateForm()
@@ -25,7 +26,9 @@ def index(request, auth_form=None, user_form=None):
  
         return render(request,
                       'home.html',
-                      {'auth_form': auth_form, 'user_form': user_form, })
+                      {'auth_form': auth_form, 
+                       'user_form': user_form, })
+
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticateForm(data=request.POST)
@@ -75,7 +78,7 @@ def submit(request):
 @login_required
 def public(request, karma_form=None):
     karma_form = karma_form or KarmaForm()
-    posts = Karma.objects.reverse()[:10]
+    posts = Karma.objects.reverse()[:100]
     return render(request,
                   'public.html',
                   {'karma_form': karma_form, 'next_url': '/posts',
