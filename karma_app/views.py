@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from karma_app.forms import AuthenticateForm, UserCreateForm, KarmaForm
-from karma_app.models import Karma
+from karma_app.models import Post
 
 def index(request, auth_form=None, user_form=None):
     # User is logged in
@@ -75,10 +75,9 @@ def submit(request):
             return public(request, karma_form)
     return redirect('/')
 
-@login_required
 def public(request, karma_form=None):
     karma_form = karma_form or KarmaForm()
-    posts = Karma.objects.reverse()[:100]
+    posts = Post.objects.reverse()[:100]
     return render(request,
                   'public.html',
                   {'karma_form': karma_form, 'next_url': '/posts',

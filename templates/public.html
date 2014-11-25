@@ -9,14 +9,23 @@
         {% for post in posts %}
         <div class="postWrapper">
             {% if post.image %}
-            <img src="{{ post.image_main_page.url }}">
+            <img class ="postImage" src="{{ post.image_main_page.url }}">
             {% endif %}
-            <p class="postDescription">{{ post.content }}</p>
-
-            <img class="avatar" src="{{ post.user.profile.gravatar_url }}">
-            <span class="name">{{ post.user.first_name }}</span>@{{ post.user.username }}
-            <span class="time">{{ post.creation_date|timesince }}</span>
-
+            <div class="postMeta">
+                <div class="postDescription">
+                    {{ post.content }}
+                </div>
+                <div class="postBadges">
+                        <a class="comments">10</a>
+                        <a class="karma">+14</a>
+                    </div>
+                <div class="postAuthor">
+                    <img class="avatar" src="{{ post.user.profile.gravatar_url }}">
+                    <span class="name">{{ post.user.first_name }}</span>
+                    <div class="time">{{ post.creation_date|timesince }}</div>
+                </div>
+            </div>
+            
         </div>
         {% endfor %}
     </div>

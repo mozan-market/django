@@ -6,7 +6,7 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 
 
-class Karma(models.Model):
+class Post(models.Model):
     content = models.CharField(max_length=140)
     user = models.ForeignKey(User)
     creation_date = models.DateTimeField(auto_now=True, blank=True)

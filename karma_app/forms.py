@@ -2,7 +2,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.utils.html import strip_tags
-from karma_app.models import Karma
+from karma_app.models import Post
 
 class UserCreateForm(UserCreationForm):
     email = forms.EmailField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder': 'Email'}))
@@ -48,5 +48,5 @@ class KarmaForm(forms.ModelForm):
         return form
  
     class Meta:
-        model = Karma
+        model = Post
         exclude = ('user',)
