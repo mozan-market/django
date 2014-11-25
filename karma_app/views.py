@@ -84,6 +84,8 @@ def public(request, karma_form=None):
                   {'karma_form': karma_form, 'next_url': '/posts',
                    'posts': posts, 'username': request.user.username})
 
+
+
 from django.db.models import Count
 from django.http import Http404
  

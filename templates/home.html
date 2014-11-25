@@ -1,12 +1,7 @@
 {% extends "base.html" %}
  
 {% block login %}
-    <form action="/login" method="post">{% csrf_token %}
-        {% for field in auth_form %}
-        {{ field }}
-        {% endfor %}
-        <input type="submit" id="btnLogIn" value="Log In">
-    </form>
+    
 {% endblock %}
  
 {% block content %}
@@ -16,16 +11,24 @@
     {{ user_form.non_field_errors }}
 </div>
 {% endif %}
-<img src="http://vast-earth-7154.herokuapp.com/static/gfx/frog.jpg">
-<div class="panel right">
-    <h1>New to Karma?</h1>
-    <p>
-        <form action="/signup" method="post">{% csrf_token %}
-            {% for field in user_form %}
-            {{ field }}
-            {% endfor %}
-            <input type="submit" value="Create Account">
-        </form>
-    </p>
-</div>
+ <div class="panel middle">
+        {% for post in posts %}
+        <div class="karmaWrapper"> 
+            <a href="/users/{{ post.user.username }}">
+                <img class="avatar" src="{{ post.user.profile.gravatar_url }}">
+                <span class="name">{{ post.user.first_name }}</span>
+            </a>
+            @{{ post.user.username }}
+            <p> 
+                {% if post.image %}
+                    {% for image in post.images %}
+                        <img src="{{ post.images.url }}">
+                    {% endfor %}
+                {% endif %}
+
+                {{ post.content }} 
+            </p>
+        </div>
+        {% endfor %}
+    </div>
 {% endblock %}

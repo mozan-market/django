@@ -7,7 +7,7 @@
     <header>
         <div class="wrapper">
             <h1><a href="/">karma</a></h1>
-            <span>улучшая сотрудничество</span>
+            <span>товары, услуги, репутация</span>
             {% block login %}
             <a href="/">Главная</a>
             <a href="/users/">Public Profiles</a>
@@ -22,11 +22,11 @@
     <div id="content">
         <div class="wrapper">
             {% block flash %}
-            {% if auth_form.non_field_errors or user_form.non_field_errors or karma_form.errors %}
+            {% if auth_form.non_field_errors or user_form.non_field_errors or Karma_form.errors %}
             <div class="flash error">
                 {{ auth_form.non_field_errors }}
                 {{ user_form.non_field_errors }}
-                {{ karma_form.content.errors }}
+                {{ Karma_form.content.errors }}
             </div>
             {% endif %}
             {% if notice %}
