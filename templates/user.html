@@ -12,11 +12,9 @@
                 <span class="name">{{ user.first_name }}</span>
             </a>
                 @{{ user.username }}
-            <p>
-                Количество объявлений: {{ posts.count }} 
-                <span class="spacing">{{ user.profile.follows.all.count }} </span>
-                <span class="spacing">{{ user.profile.followed_by.all.count }} </span>
-            </p>
+                <p>Количество объявлений: {{ posts.count }}</p>
+                <p class="spacing">Репутация: {{ user.profile.follows.all.count }} </p>
+                <p class="spacing">Отзывы: {{ user.profile.followed_by.all.count }} </p>
             {% if follow %}
             <form action="/follow" method="post">
                 {% csrf_token %}

@@ -14,7 +14,6 @@
                 <img class="avatar" src="{{ user.profile.gravatar_url }}">
                 <span class="name">{{ user.first_name }}</span>
             </a>
-            @{{ user.username }}
             <p>
                 {{ user.karma_count}} Posts
                 <span class="spacing">{{ user.profile.followed_by.count }} Followers</span>
