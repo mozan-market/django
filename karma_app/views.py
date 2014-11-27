@@ -77,10 +77,10 @@ def submit(request):
 
 def public(request, karma_form=None):
     karma_form = karma_form or KarmaForm()
-    posts = Post.objects.reverse()[:100]
+    posts = Post.objects.all().order_by('-creation_date')[:100]
     return render(request,
                   'public.html',
-                  {'karma_form': karma_form, 'next_url': '/posts',
+                  {'karma_form': karma_form, 'next_url': '/',
                    'posts': posts, 'username': request.user.username})
 
 
@@ -90,7 +90,7 @@ from django.http import Http404
  
 def get_latest(user):
     try:
-        return user.karma_set.order_by('-id')[0]
+        return user.post_set.order_by('-id')[0]
     except IndexError:
         return ""
  
@@ -103,12 +103,12 @@ def users(request, username="", karma_form=None):
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             raise Http404
-        posts = Karma.objects.filter(user=user.id)
+        posts = Post.objects.filter(user=user.id)
         if username == request.user.username or request.user.profile.follows.filter(user__username=username):
             # Self Profile or buddies' profile
             return render(request, 'user.html', {'user': user, 'posts': posts, })
         return render(request, 'user.html', {'user': user, 'posts': posts, 'follow': True, })
-    users = User.objects.all().annotate(posts_count=Count('karma'))
+    users = User.objects.all().annotate(posts_count=Count('post'))
     posts = map(get_latest, users)
     obj = zip(users, posts)
     karma_form = karma_form or KarmaForm()

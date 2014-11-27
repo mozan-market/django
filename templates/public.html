@@ -20,10 +20,15 @@
                         <a class="karma">+14</a>
                     </div>
                 <div class="postAuthor">
-                    <img class="avatar" src="{{ post.user.profile.gravatar_url }}">
-                    <span class="name">{{ post.user.first_name }}</span>
-                    <div class="time">{{ post.creation_date|timesince }}</div>
+                    <a href="/users/{{ post.user.username }}">
+                        <img class="avatar" src="{{ post.user.profile.gravatar_url }}">
+                        <span class="name">{{ post.user.first_name }}</span>
+                    </a>
+                    <div class="category">Категория: {{ post.category }}</div>    
+
                 </div>
+                
+                
             </div>
             
         </div>

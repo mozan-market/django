@@ -1,23 +1,21 @@
 {% extends "base.html" %}
 {% block login %}
-    {% with user.username as username %}
-        {{ block.super }}
-    {% endwith %}
+
 {% endblock %}
  
 {% block content %}
     <div class="panel left">
-        <h1>{{ user.first_name }}'s Profile</h1>
-        <div class="karmaWrapper">
+        <h1>Профиль: {{ user.first_name }}</h1>
+        <div class="userWrapper">
             <a href="/users/{{ user.username }}">
                 <img class="avatar" src="{{ user.profile.gravatar_url }}">
                 <span class="name">{{ user.first_name }}</span>
             </a>
                 @{{ user.username }}
             <p>
-                {{ posts.count }} Posts
-                <span class="spacing">{{ user.profile.follows.all.count }} Following</span>
-                <span class="spacing">{{ user.profile.followed_by.all.count }} Followers</span>
+                Количество объявлений: {{ posts.count }} 
+                <span class="spacing">{{ user.profile.follows.all.count }} </span>
+                <span class="spacing">{{ user.profile.followed_by.all.count }} </span>
             </p>
             {% if follow %}
             <form action="/follow" method="post">
@@ -30,16 +28,27 @@
     </div>
  
     <div class="panel left">
-        <h1>{{ user.first_name }}'s Posts</h1>
+        <h1>Объявления автора {{ user.first_name }}: </h1>
         {% for post in posts %}
-        <div class="karmaWrapper">
-            <a href="/users/{{ user.username }}">
-                <img class="avatar" src="{{ user.profile.gravatar_url }}">
-                <span class="name">{{ karma.user.first_name }}</span>
-            </a>
-            @{{ post.user.username }}
-            <span class="time">{{ post.creation_date|timesince }}</span>
-            <p>{{ post.content }}</p>
+        <div class="postWrapper">
+            {% if post.image %}
+            <img class ="postImage" src="{{ post.image_main_page.url }}">
+            {% endif %}
+            <div class="postMeta">
+                <div class="postDescription">
+                    {{ post.content }}
+                </div>
+                <div class="postBadges">
+                        <a class="comments">10</a>
+                        <a class="karma">+14</a>
+                    </div>
+                <div class="postAuthor">
+                    <div class="category">Категория: {{ post.category }}</div>    
+                </div>
+                
+                
+            </div>
+            
         </div>
         {% endfor %}
     </div>

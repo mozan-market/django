@@ -1,20 +1,13 @@
 {% extends "base.html" %}
- 
+
+{% block login %}
+    
+{% endblock %}
+
 {% block content %}
-    <div class="panel right">
-        <h1>Create a Post</h1>
-        <p>
-            <form action="/submit" method="post">
-            {% for field in karma_form %}{% csrf_token %}
-            {{ field }}
-            {% endfor %}
-            <input type="hidden" value="{{ next_url }}" name="next_url">
-            <input type="submit" value="Post!">
-            </form>
-        </p>
-    </div>
+
     <div class="panel left">
-        <h1>Public Profiles</h1>
+        <h1>Пользователи</h1>
         {% for user, karma in obj %}
         <div class="karmaWrapper">
             <a href="/users/{{ user.username }}">

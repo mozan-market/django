@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'south',
     'karma_app',
+    'mptt',
 )
 
 MIDDLEWARE_CLASSES = (
