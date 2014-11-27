@@ -17,7 +17,7 @@ urlpatterns = patterns('',
     #url(r'^submit$', 'karma_app.views.submit'), # submit new posts
     #url(r'^users/$', 'karma_app.views.users'),
     url(r'^users/(?P<username>\w{0,30})/$', 'karma_app.views.users'),
+    url(r'^post/(?P<post_id>\w{0,30})/$', 'karma_app.views.posts'),
     url(r'^follow$', 'karma_app.views.follow'),
-
 )
   

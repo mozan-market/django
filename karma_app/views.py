@@ -95,7 +95,7 @@ def get_latest(user):
         return ""
  
  
-@login_required
+
 def users(request, username="", karma_form=None):
     if username:
         # Show a profile
@@ -104,19 +104,18 @@ def users(request, username="", karma_form=None):
         except User.DoesNotExist:
             raise Http404
         posts = Post.objects.filter(user=user.id)
-        if username == request.user.username or request.user.profile.follows.filter(user__username=username):
-            # Self Profile or buddies' profile
-            return render(request, 'user.html', {'user': user, 'posts': posts, })
-        return render(request, 'user.html', {'user': user, 'posts': posts, 'follow': True, })
-    users = User.objects.all().annotate(posts_count=Count('post'))
-    posts = map(get_latest, users)
-    obj = zip(users, posts)
-    karma_form = karma_form or KarmaForm()
-    return render(request,
-                  'profiles.html',
-                  {'obj': obj, 'next_url': '/users/',
-                   'karma_form': karma_form,
-                   'username': request.user.username, })
+        return render(request, 'user.html', {'user': user, 'posts': posts, })
+
+def posts(request, post_id="", karma_form=None):
+    if post_id:
+        # Show a post
+        try:
+            post = Post.objects.get(pk=post_id)
+        except User.DoesNotExist:
+            raise Http404
+        #posts = Post.objects.filter(user=user.id)
+        return render(request, 'post.html', {'post': post, })
+
 
 
 from django.core.exceptions import ObjectDoesNotExist

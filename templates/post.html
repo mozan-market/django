@@ -1,3 +1,4 @@
+
 {% extends "base.html" %}
 {% block login %}
     
@@ -6,12 +7,9 @@
 {% block content %}
     
     <div class="public">
-        {% for post in posts %}
         <div class="postWrapper">
             {% if post.image %}
-    		<a href="/post/{{ post.pk }}">
-		<img class ="postImage" src="{{ post.image_post_page.url }}">
-		</a>
+            <img class ="postImage" src="{{ post.image_main_page.url }}">
             {% endif %}
             <div class="postMeta">
                 <div class="postDescription">
@@ -34,6 +32,5 @@
             </div>
             
         </div>
-        {% endfor %}
     </div>
 {% endblock %}

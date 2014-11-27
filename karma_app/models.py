@@ -30,7 +30,13 @@ class Post(models.Model):
                                       processors=[ResizeToFill(236, 180)],
                                       format='JPEG',
                                       options={'quality': 60})
+    image_post_page = ImageSpecField(source='image',
+                                      processors=[ResizeToFill(480, )],
+                                      format='JPEG',
+                                      options={'quality': 60})
 
+
+    url(r'^users/(?P<username>\w{0,30})/$', 'karma_app.views.users'),
     def __unicode__(self):
         return self.content 
 
