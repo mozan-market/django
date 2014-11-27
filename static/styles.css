@@ -113,7 +113,7 @@ header div.wrapper #btnLogOut {
  
 }
 
-#content div.wrapper div.postWrapper {
+#content div.wrapper .public div.postWrapper {
     border-radius: 6px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.22);
     background: #fff;
@@ -123,6 +123,16 @@ header div.wrapper #btnLogOut {
     margin: 0 7px 14px;
     
 }
+#content div.wrapper .post div.postWrapper {
+    border-radius: 6px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.22);
+    background: #fff;
+    width: 480px;
+    font-size: 13px;
+    margin: 30px auto;
+    
+}
+
 #content div.wrapper div.userWrapper {
     border-radius: 6px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.22);

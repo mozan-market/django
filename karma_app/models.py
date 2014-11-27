@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 import hashlib
 from django.core.files.storage import FileSystemStorage
 from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill
+from imagekit.processors import ResizeToFill, ResizeToFit, Adjust
 from mptt.models import MPTTModel, TreeForeignKey
 
 
@@ -31,12 +31,12 @@ class Post(models.Model):
                                       format='JPEG',
                                       options={'quality': 60})
     image_post_page = ImageSpecField(source='image',
-                                      processors=[ResizeToFill(480, )],
+                                      processors=[ResizeToFit(480, 480),
+			              Adjust(contrast=1.2, sharpness=1.1)],	
                                       format='JPEG',
-                                      options={'quality': 60})
+                                      options={'quality': 75})
 
 
-    url(r'^users/(?P<username>\w{0,30})/$', 'karma_app.views.users'),
     def __unicode__(self):
         return self.content 
 
