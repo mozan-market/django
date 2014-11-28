@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from karma_app.forms import AuthenticateForm, UserCreateForm, KarmaForm
-from karma_app.models import Post
+from karma_app.models import Post, Image
 
 def index(request, auth_form=None, user_form=None):
     # User is logged in
@@ -78,10 +78,11 @@ def submit(request):
 def public(request, karma_form=None):
     karma_form = karma_form or KarmaForm()
     posts = Post.objects.all().order_by('-creation_date')[:100]
+    images = Image.objects.all().order_by('-id')
     return render(request,
                   'public.html',
                   {'karma_form': karma_form, 'next_url': '/',
-                   'posts': posts, 'username': request.user.username})
+                   'posts': posts, 'username': request.user.username, 'images': images,})
 
 
 
@@ -111,10 +112,10 @@ def posts(request, post_id="", karma_form=None):
         # Show a post
         try:
             post = Post.objects.get(pk=post_id)
+            images = Image.objects.filter(post=post)
         except User.DoesNotExist:
             raise Http404
-        #posts = Post.objects.filter(user=user.id)
-        return render(request, 'post.html', {'post': post, })
+        return render(request, 'post.html', {'post': post, 'images': images})
 
 
 

@@ -8,11 +8,13 @@
     <div class="public">
         {% for post in posts %}
         <div class="postWrapper">
-            {% if post.image %}
-    		<a href="/post/{{ post.pk }}">
-		<img class ="postImage" src="{{ post.image_main_page.url }}">
-		</a>
-            {% endif %}
+			 {% for image in images %}
+				{% if image.post == post  %}
+					<a href="/post/{{ post.pk }}">
+						<img class ="postImage" src="{{ image.image_main_page.url }}">
+					</a>
+				{% endif %}
+			 {% endfor %} 
             <div class="postMeta">
                 <div class="postDescription">
                     {{ post.content }}

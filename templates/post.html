@@ -8,9 +8,9 @@
     
     <div class="post">
         <div class="postWrapper">
-            {% if post.image %}
-            <img class ="postImage" src="{{ post.image_post_page.url }}">
-            {% endif %}
+            {% for image in images  %}
+            <img class ="postImage" src="{{ image.image_post_page.url }}">
+            {% endfor %}
             <div class="postMeta">
                 <div class="postDescription">
                     {{ post.content }}
