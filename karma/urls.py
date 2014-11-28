@@ -1,23 +1,34 @@
 from django.conf.urls import patterns, include, url
-
+from django.contrib.auth.models import User
+from rest_framework import routers, serializers, viewsets
 from django.contrib import admin
+
 admin.autodiscover()
 
+# Serializers define the API representation.
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+        class Meta:
+                    model = User
+                    fields = ('url', 'username', 'email', 'is_staff')
+
+# ViewSets define the view behavior.
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+# Routers provide an easy way of automatically determining the URL conf.
+router = routers.DefaultRouter()
+router.register(r'users', UserViewSet)
+
+
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'karma.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'karma_app.views.public'), # root
-    #url(r'^login$', 'karma_app.views.login_view'), # login
-    #url(r'^logout$', 'karma_app.views.logout_view'), # logout
-    #url(r'^signup$', 'karma_app.views.signup'), # signup
-    #url(r'^posts/$', 'karma_app.views.public'), # public posts
-    #url(r'^submit$', 'karma_app.views.submit'), # submit new posts
-    #url(r'^users/$', 'karma_app.views.users'),
     url(r'^users/(?P<username>\w{0,30})/$', 'karma_app.views.users'),
-    url(r'^post/(?P<post_id>\w{0,30})/$', 'karma_app.views.posts'),
+    url(r'^post(?P<post_id>\w{0,30})/$', 'karma_app.views.posts'),
     url(r'^follow$', 'karma_app.views.follow'),
-)
-  
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api$', include(router.urls)),
+
+    )  
