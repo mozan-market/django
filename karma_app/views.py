@@ -78,7 +78,7 @@ def submit(request):
 def public(request, karma_form=None):
     karma_form = karma_form or KarmaForm()
     posts = Post.objects.all().order_by('-creation_date')[:100]
-    images = Image.objects.all().order_by('-id')
+    images = Image.objects.filter(post=posts)
     return render(request,
                   'public.html',
                   {'karma_form': karma_form, 'next_url': '/',
@@ -105,7 +105,9 @@ def users(request, username="", karma_form=None):
         except User.DoesNotExist:
             raise Http404
         posts = Post.objects.filter(user=user.id)
-        return render(request, 'user.html', {'user': user, 'posts': posts, })
+        images = Image.objects.filter(post=posts)
+
+        return render(request, 'user.html', {'user': user, 'posts': posts, 'images': images, })
 
 def posts(request, post_id="", karma_form=None):
     if post_id:

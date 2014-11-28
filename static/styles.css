@@ -176,6 +176,14 @@ header div.wrapper #btnLogOut {
 #content div.wrapper div.postWrapper .postAuthor .category {
     color: #777;   
 }
+#content .right {
+	width: 30%;
+	float: right;
+}
+#content .left {
+	width: 70%;
+	float: left;
+}
 
 
 footer {
