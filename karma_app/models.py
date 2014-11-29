@@ -23,7 +23,7 @@ class Category(MPTTModel):
 class Post(models.Model):
     content = models.CharField(max_length=140)
     user = models.ForeignKey(User)
-    category = models.ForeignKey(Category, default = '')
+    category = models.ForeignKey(Category)
     creation_date = models.DateTimeField(auto_now=True, blank=True)
    
     def __unicode__(self):
