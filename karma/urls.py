@@ -30,5 +30,6 @@ urlpatterns = patterns('',
     url(r'^follow$', 'karma_app.views.follow'),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api$', include(router.urls)),
+    url(r'^search/', include('haystack.urls')),
 
     )  

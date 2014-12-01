@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'karma_app',
     'mptt',
     'rest_framework',
+    'haystack',
 )
 REST_FRAMEWORK = {
             # Use Django's standard `django.contrib.auth` permissions,
@@ -48,6 +49,15 @@ REST_FRAMEWORK = {
                                 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
                                     ]
                     }
+HAYSTACK_CONNECTIONS = {
+            'default': {
+                        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+                                'URL': 'http://127.0.0.1:9200/',
+                                        'INDEX_NAME': 'haystack',
+                                            },
+            }
+
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -69,13 +79,11 @@ WSGI_APPLICATION = 'karma.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'NAME': 'django',
         'USER': 'django',
         'PASSWORD': 'rDGfyoJZ3g',
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': '',
     }
 }
 
