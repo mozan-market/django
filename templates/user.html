@@ -8,7 +8,7 @@
         <h1>Профиль: {{ user.first_name }}</h1>
         <div class="userWrapper">
             <a href="/users/{{ user.username }}">
-                <img class="avatar" src="{{ user.profile.gravatar_url }}">
+                <img class="avatar" src="{{ user.profile.avatar_30.url }}">
                 <span class="name">{{ user.first_name }}</span>
             </a>
                 @{{ user.username }}

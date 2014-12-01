@@ -1,5 +1,5 @@
 from django.contrib import admin
-from karma_app.models import Post, Image, Category
+from karma_app.models import UserProfile, Post, Image, Category
 from mptt.admin import MPTTModelAdmin
 
 # Register your models here.
@@ -14,6 +14,7 @@ class PostAdmin(admin.ModelAdmin):
 
 
 
+admin.site.register(UserProfile)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Category, MPTTModelAdmin)
  

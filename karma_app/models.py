@@ -41,10 +41,12 @@ class Image(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
- 
-    def gravatar_url(self):
-        return "http://www.gravatar.com/avatar/%s?s=30" % hashlib.md5(self.user.email).hexdigest()
- 
+    avatar_original_image = models.ImageField(upload_to='avatars/', default='default/member-photo.png') 
+    avatar_30 = ImageSpecField(source='avatar_original_image', processors=[ResizeToFill(30, 30)], format='JPEG', options={'quality': 60})
+    def __unicode__(self):
+        return self.user.username 
+
+
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
 
