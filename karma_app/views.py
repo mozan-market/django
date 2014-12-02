@@ -4,6 +4,58 @@ from django.contrib.auth.models import User
 from karma_app.forms import AuthenticateForm, UserCreateForm, KarmaForm
 from karma_app.models import Post, Image
 
+
+def public(request, karma_form=None):
+    karma_form = karma_form or KarmaForm()
+    posts = Post.objects.all().order_by('-creation_date')[:100]
+    images = []
+    for post in posts:
+        images.extend(list(Image.objects.filter(post=post).order_by('id')[:1]))
+    return render(request,
+                  'public.html',
+                  {'karma_form': karma_form, 'next_url': '/',
+                   'posts': posts, 'username': request.user.username, 'images': images,})
+
+
+
+from django.db.models import Count
+from django.http import Http404
+ 
+def get_latest(user):
+    try:
+        return user.post_set.order_by('-id')[0]
+    except IndexError:
+        return ""
+ 
+ 
+
+def users(request, username="", karma_form=None):
+    if username:
+        # Show a profile
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise Http404
+        posts = Post.objects.filter(user=user.id)
+        images = []
+        for post in posts:
+            images.extend(list(Image.objects.filter(post=post).order_by('id')[:1]))
+  
+        return render(request, 'user.html', {'user': user, 'posts': posts, 'images': images, })
+
+def posts(request, post_id="", karma_form=None):
+    if post_id:
+        # Show a post
+        try:
+            post = Post.objects.get(pk=post_id)
+            images = Image.objects.filter(post=post)
+
+        except User.DoesNotExist:
+            raise Http404
+        return render(request, 'post.html', {'post': post, 'images': images})
+
+
+
 def index(request, auth_form=None, user_form=None):
     # User is logged in
     if request.user.is_authenticated():
@@ -74,55 +126,6 @@ def submit(request):
         else:
             return public(request, karma_form)
     return redirect('/')
-
-def public(request, karma_form=None):
-    karma_form = karma_form or KarmaForm()
-    posts = Post.objects.all().order_by('-creation_date')[:100]
-    #images = Image.objects.filter(post=posts)
-    images = []
-    for post in posts:
-        #images = Image.objects.filter(post=post).order_by('id')[:1]
-        images.extend(list(Image.objects.filter(post=post).order_by('id')[:1]))
-    return render(request,
-                  'public.html',
-                  {'karma_form': karma_form, 'next_url': '/',
-                   'posts': posts, 'username': request.user.username, 'images': images,})
-
-
-
-from django.db.models import Count
-from django.http import Http404
- 
-def get_latest(user):
-    try:
-        return user.post_set.order_by('-id')[0]
-    except IndexError:
-        return ""
- 
- 
-
-def users(request, username="", karma_form=None):
-    if username:
-        # Show a profile
-        try:
-            user = User.objects.get(username=username)
-        except User.DoesNotExist:
-            raise Http404
-        posts = Post.objects.filter(user=user.id)
-        images = Image.objects.filter(post=posts)
-
-        return render(request, 'user.html', {'user': user, 'posts': posts, 'images': images, })
-
-def posts(request, post_id="", karma_form=None):
-    if post_id:
-        # Show a post
-        try:
-            post = Post.objects.get(pk=post_id)
-            images = Image.objects.filter(post=post)
-        except User.DoesNotExist:
-            raise Http404
-        return render(request, 'post.html', {'post': post, 'images': images})
-
 
 
 from django.core.exceptions import ObjectDoesNotExist
