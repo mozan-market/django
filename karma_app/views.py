@@ -78,7 +78,11 @@ def submit(request):
 def public(request, karma_form=None):
     karma_form = karma_form or KarmaForm()
     posts = Post.objects.all().order_by('-creation_date')[:100]
-    images = Image.objects.filter(post=posts)
+    #images = Image.objects.filter(post=posts)
+    images = []
+    for post in posts:
+        #images = Image.objects.filter(post=post).order_by('id')[:1]
+        images.extend(list(Image.objects.filter(post=post).order_by('id')[:1]))
     return render(request,
                   'public.html',
                   {'karma_form': karma_form, 'next_url': '/',

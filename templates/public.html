@@ -9,7 +9,7 @@
         {% for post in posts %}
         <div class="postWrapper">
 			 {% for image in images %}
-				{% if image.post == post  %}
+				{% if image.post == post %}
 					<a href="/post/{{ post.pk }}">
 						<img class ="postImage" src="{{ image.image_main_page.url }}">
 					</a>

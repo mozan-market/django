@@ -34,15 +34,15 @@ class Image(models.Model):
 
 	original_image = models.ImageField(upload_to='post_images/', 
                               default = '',)
-	image_main_page = ImageSpecField(source='original_image', processors=[ResizeToFill(236, 180)], format='JPEG', options={'quality': 60})
-	image_post_page = ImageSpecField(source='original_image', processors=[ResizeToFit(480, 480), Adjust(contrast=1.2, sharpness=1.1)], format='JPEG', options={'quality': 75})
+	image_main_page = ImageSpecField(source='original_image', processors=[ResizeToFill(236, 180), Adjust(contrast=1.2, sharpness=1.1)], format='JPEG', options={'quality': 60})
+	image_post_page = ImageSpecField(source='original_image', processors=[ResizeToFit(480, 480)], format='JPEG', options={'quality': 75})
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User)
     follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
     avatar_original_image = models.ImageField(upload_to='avatars/', default='default/member-photo.png') 
-    avatar_30 = ImageSpecField(source='avatar_original_image', processors=[ResizeToFill(30, 30)], format='JPEG', options={'quality': 60})
+    avatar_30 = ImageSpecField(source='avatar_original_image', processors=[ResizeToFill(30, 30), Adjust(contrast=1.2, sharpness=1.1)], format='JPEG', options={'quality': 80})
     def __unicode__(self):
         return self.user.username 
 
