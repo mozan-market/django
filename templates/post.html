@@ -1,7 +1,34 @@
-
 {% extends "base.html" %}
-{% block login %}
-    
+{% load hitcount_tags %}
+
+{% block head %}
+	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+	<script type="text/javascript">
+	function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+    $(document).ready(function() {
+			        {% get_hit_count_javascript for post %}
+					    });
+	</script>
+
+{% endblock %}
+
+{% block login %}   
 {% endblock %}
 
 {% block content %}
@@ -17,7 +44,7 @@
                 </div>
                 <div class="postBadges">
                         <a class="comments">10</a>
-                        <a class="karma">+14</a>
+						<a class="karma">{% get_hit_count for post %}</a>
                     </div>
                 <div class="postAuthor">
                     <a href="/users/{{ post.user.username }}">

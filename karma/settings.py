@@ -36,28 +36,34 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'south',
+    'south',            #databse sync and migrate
     'karma_app',
-    'mptt',
-    'rest_framework',
-    'haystack',
+    'mptt',             #Categories
+    'rest_framework',   #DRF
+    'haystack',         #search
+    'hitcount',         #count post views
+
 )
 REST_FRAMEWORK = {
-            # Use Django's standard `django.contrib.auth` permissions,
-                # or allow read-only access for unauthenticated users.
-                    'DEFAULT_PERMISSION_CLASSES': [
-                                'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-                                    ]
-                    }
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+    'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
+
 HAYSTACK_CONNECTIONS = {
-            'default': {
-                        'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
-                                'URL': 'http://127.0.0.1:9200/',
-                                        'INDEX_NAME': 'haystack',
-                                            },
-            }
+    'default': {
+    'ENGINE': 'haystack.backends.elasticsearch_backend.ElasticsearchSearchEngine',
+    'URL': 'http://127.0.0.1:9200/',
+    'INDEX_NAME': 'haystack',
+    },
+}
 
-
+# The three variables to configure the module.
+HITCOUNT_KEEP_HIT_ACTIVE = { 'days': 1 }
+HITCOUNT_HITS_PER_IP_LIMIT = 0
+HITCOUNT_EXCLUDE_USER_GROUP = ( 'Staff', )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -98,7 +104,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

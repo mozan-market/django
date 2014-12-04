@@ -4,8 +4,8 @@
 {% endblock %}
  
 {% block content %}
-    <div class="panel right">
-        <h1>Профиль: {{ user.first_name }}</h1>
+    <div class="panel left">
+        <h1>{{ user.first_name }}</h1>
         <div class="userWrapper">
             <a href="/users/{{ user.username }}">
                 <img class="avatar" src="{{ user.profile.avatar_30.url }}">
@@ -25,8 +25,7 @@
         </div>
     </div>
  
-    <div class="panel public left">
-        <h1>Объявления автора {{ user.first_name }}: </h1>
+    <div class="panel posts">
         {% for post in posts %}
         <div class="postWrapper">
             {% for image in images %}

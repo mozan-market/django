@@ -1,11 +1,13 @@
 {% extends "base.html" %}
+
+{% load hitcount_tags %}
+
 {% block login %}
-    
 {% endblock %}
 
 {% block content %}
     
-    <div class="public">
+    <div class="posts">
         {% for post in posts %}
         <div class="postWrapper">
 			 {% for image in images %}
@@ -21,7 +23,7 @@
                 </div>
                 <div class="postBadges">
                         <a class="comments">10</a>
-                        <a class="karma">+14</a>
+						<a class="karma">{% get_hit_count for post %}</a>
                     </div>
                 <div class="postAuthor">
                     <a href="/users/{{ post.user.username }}">
