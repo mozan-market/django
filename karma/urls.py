@@ -1,16 +1,19 @@
 from django.conf.urls import patterns, include, url
 from django.contrib.auth.models import User
-from rest_framework import routers, serializers, viewsets
 from django.contrib import admin
+
 from hitcount.views import update_hit_count_ajax
+
+from rest_framework import routers, serializers, viewsets
+from rest_framework.urlpatterns import format_suffix_patterns
 
 admin.autodiscover()
 
 # Serializers define the API representation.
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-        class Meta:
-                    model = User
-                    fields = ('url', 'username', 'email', 'is_staff')
+    class Meta:
+        model = User
+        fields = ('url', 'username', 'email', 'is_staff')
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -37,4 +40,4 @@ urlpatterns = patterns('',
 
     url(r'^search/', include('haystack.urls')),
     url(r'^counter/ajax/hit/$', update_hit_count_ajax, name='hitcount_update_ajax'),
-)  
+)
