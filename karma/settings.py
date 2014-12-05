@@ -44,12 +44,17 @@ INSTALLED_APPS = (
     'hitcount',         #count post views
 
 )
+from rest_framework.settings import api_settings
+
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    ],
+    'UNICODE_JSON': True,
+    'COMPACT_JSON': False,
+
 }
 
 HAYSTACK_CONNECTIONS = {
@@ -116,10 +121,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 #LOGIN_URL = '/'
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(BASE_DIR, 'templates')
-)
+TEMPLATE_DIRS = ( os.path.join(BASE_DIR, 'templates'), )
