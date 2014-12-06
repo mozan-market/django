@@ -2,7 +2,7 @@ from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from django.utils.html import strip_tags
-from karma_app.models import Post
+from mozan_app.models import Post
 
 class UserCreateForm(UserCreationForm):
     email = forms.EmailField(required=True, widget=forms.widgets.TextInput(attrs={'placeholder': 'Email'}))
@@ -36,15 +36,15 @@ class AuthenticateForm(AuthenticationForm):
                 self.fields[f].widget.attrs.update({'class': 'error', 'value': strip_tags(error)})
         return form
     
-class KarmaForm(forms.ModelForm):
-    content = forms.CharField(required=True, widget=forms.widgets.Textarea(attrs={'class': 'karmaText'}))
+class MozanForm(forms.ModelForm):
+    content = forms.CharField(required=True, widget=forms.widgets.Textarea(attrs={'class': 'mozanText'}))
     images = forms.ImageField(required=False)
  
     def is_valid(self):
-        form = super(KarmaForm, self).is_valid()
+        form = super(MozanForm, self).is_valid()
         for f in self.errors.iterkeys():
             if f != '__all__':
-                self.fields[f].widget.attrs.update({'class': 'error karmaText'})
+                self.fields[f].widget.attrs.update({'class': 'error mozanText'})
         return form
  
     class Meta:

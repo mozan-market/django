@@ -1,5 +1,5 @@
 from haystack import indexes
-from karma_app.models import Post
+from mozan_app.models import Post
 
 
 class PostIndex(indexes.SearchIndex, indexes.Indexable):

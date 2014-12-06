@@ -4,9 +4,9 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from karma_app.forms import AuthenticateForm, UserCreateForm, KarmaForm
-from karma_app.models import Post, Image
-from karma_app.serializers import PostSerializer
+from mozan_app.forms import AuthenticateForm, UserCreateForm, MozanForm
+from mozan_app.models import Post, Image
+from mozan_app.serializers import PostSerializer
 
 
 from rest_framework import status
@@ -58,15 +58,15 @@ def post_REST_detail(request, pk, format=None):
         post.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-def public(request, karma_form=None):
-    karma_form = karma_form or KarmaForm()
+def public(request, mozan_form=None):
+    mozan_form = mozan_form or MozanForm()
     posts = Post.objects.all().order_by('-creation_date')[:100]
     images = []
     for post in posts:
         images.extend(list(Image.objects.filter(post=post).order_by('id')[:1]))
     return render(request,
                   'public.html',
-                  {'karma_form': karma_form, 'next_url': '/',
+                  {'mozan_form': mozan_form, 'next_url': '/',
                    'posts': posts, 'username': request.user.username, 'images': images,})
 
 
@@ -82,7 +82,7 @@ def get_latest(user):
  
  
 
-def users(request, username="", karma_form=None):
+def users(request, username="", mozan_form=None):
     if username:
         # Show a profile
         try:
@@ -96,7 +96,7 @@ def users(request, username="", karma_form=None):
   
         return render(request, 'user.html', {'user': user, 'posts': posts, 'images': images, })
 
-def posts(request, post_id="", karma_form=None):
+def posts(request, post_id="", mozan_form=None):
     if post_id:
         # Show a post
         try:
@@ -112,15 +112,15 @@ def posts(request, post_id="", karma_form=None):
 def index(request, auth_form=None, user_form=None):
     # User is logged in
     if request.user.is_authenticated():
-        karma_form = KarmaForm(request.POST, request.FILES)
+        mozan_form = MozanForm(request.POST, request.FILES)
         user = request.user
-        posts_self = Karma.objects.filter(user=user.id)
-        posts_buddies = Karma.objects.filter(user__userprofile__in=user.profile.follows.all)
+        posts_self = Mozan.objects.filter(user=user.id)
+        posts_buddies = Mozan.objects.filter(user__userprofile__in=user.profile.follows.all)
         posts = posts_self | posts_buddies
  
         return render(request,
                       'buddies.html',
-                      {'karma_form': karma_form, 
+                      {'mozan_form': mozan_form, 
                        'user': user,
                        'posts': posts,
                        'next_url': '/',})
@@ -169,15 +169,15 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def submit(request):
     if request.method == "POST":
-        karma_form = KarmaForm(data=request.POST)
+        mozan_form = MozanForm(data=request.POST)
         next_url = request.POST.get("next_url", "/")
-        if karma_form.is_valid():
-            karma = karma_form.save(commit=False)
-            karma.user = request.user
-            karma.save()
+        if mozan_form.is_valid():
+            mozan = mozan_form.save(commit=False)
+            mozan.user = request.user
+            mozan.save()
             return redirect(next_url)
         else:
-            return public(request, karma_form)
+            return public(request, mozan_form)
     return redirect('/')
 
 

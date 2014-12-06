@@ -1,6 +1,6 @@
 from django.forms import widgets
 from rest_framework import serializers
-from karma_app.models import Post, User, Category
+from mozan_app.models import Post, User, Category
 
 class PostSerializer(serializers.ModelSerializer):
     

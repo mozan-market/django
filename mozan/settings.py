@@ -1,5 +1,5 @@
 """
-Django settings for karma project.
+Django settings for mozan project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
@@ -37,7 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'south',            #databse sync and migrate
-    'karma_app',
+    'mozan_app',
     'mptt',             #Categories
     'rest_framework',   #DRF
     'haystack',         #search
@@ -79,9 +79,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'karma.urls'
+ROOT_URLCONF = 'mozan.urls'
 
-WSGI_APPLICATION = 'karma.wsgi.application'
+WSGI_APPLICATION = 'mozan.wsgi.application'
 
 
 # Database

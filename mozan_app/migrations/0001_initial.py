@@ -8,15 +8,69 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'UserProfile.avatar_original_image'
-        db.add_column(u'karma_app_userprofile', 'avatar_original_image',
-                      self.gf('django.db.models.fields.files.ImageField')(default='default/member-photo.png', max_length=100),
-                      keep_default=False)
+        # Adding model 'Category'
+        db.create_table(u'mozan_app_category', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(unique=True, max_length=50)),
+            ('parent', self.gf('mptt.fields.TreeForeignKey')(blank=True, related_name='children', null=True, to=orm['mozan_app.Category'])),
+            (u'lft', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            (u'rght', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            (u'tree_id', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+            (u'level', self.gf('django.db.models.fields.PositiveIntegerField')(db_index=True)),
+        ))
+        db.send_create_signal(u'mozan_app', ['Category'])
+
+        # Adding model 'Post'
+        db.create_table(u'mozan_app_post', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('content', self.gf('django.db.models.fields.CharField')(max_length=140)),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('category', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['mozan_app.Category'])),
+            ('creation_date', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+        ))
+        db.send_create_signal(u'mozan_app', ['Post'])
+
+        # Adding model 'Image'
+        db.create_table(u'mozan_app_image', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('post', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['mozan_app.Post'])),
+            ('original_image', self.gf('django.db.models.fields.files.ImageField')(default='', max_length=100)),
+        ))
+        db.send_create_signal(u'mozan_app', ['Image'])
+
+        # Adding model 'UserProfile'
+        db.create_table(u'mozan_app_userprofile', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
+            ('avatar_original_image', self.gf('django.db.models.fields.files.ImageField')(default='default/member-photo.png', max_length=100)),
+        ))
+        db.send_create_signal(u'mozan_app', ['UserProfile'])
+
+        # Adding M2M table for field follows on 'UserProfile'
+        m2m_table_name = db.shorten_name(u'mozan_app_userprofile_follows')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('from_userprofile', models.ForeignKey(orm[u'mozan_app.userprofile'], null=False)),
+            ('to_userprofile', models.ForeignKey(orm[u'mozan_app.userprofile'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['from_userprofile_id', 'to_userprofile_id'])
 
 
     def backwards(self, orm):
-        # Deleting field 'UserProfile.avatar_original_image'
-        db.delete_column(u'karma_app_userprofile', 'avatar_original_image')
+        # Deleting model 'Category'
+        db.delete_table(u'mozan_app_category')
+
+        # Deleting model 'Post'
+        db.delete_table(u'mozan_app_post')
+
+        # Deleting model 'Image'
+        db.delete_table(u'mozan_app_image')
+
+        # Deleting model 'UserProfile'
+        db.delete_table(u'mozan_app_userprofile')
+
+        # Removing M2M table for field follows on 'UserProfile'
+        db.delete_table(db.shorten_name(u'mozan_app_userprofile_follows'))
 
 
     models = {
@@ -56,37 +110,37 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'karma_app.category': {
+        u'mozan_app.category': {
             'Meta': {'object_name': 'Category'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             u'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             u'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '50'}),
-            'parent': ('mptt.fields.TreeForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['karma_app.Category']"}),
+            'parent': ('mptt.fields.TreeForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['mozan_app.Category']"}),
             u'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             u'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
         },
-        u'karma_app.image': {
+        u'mozan_app.image': {
             'Meta': {'object_name': 'Image'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'original_image': ('django.db.models.fields.files.ImageField', [], {'default': "''", 'max_length': '100'}),
-            'post': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['karma_app.Post']"})
+            'post': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['mozan_app.Post']"})
         },
-        u'karma_app.post': {
+        u'mozan_app.post': {
             'Meta': {'object_name': 'Post'},
-            'category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['karma_app.Category']"}),
+            'category': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['mozan_app.Category']"}),
             'content': ('django.db.models.fields.CharField', [], {'max_length': '140'}),
             'creation_date': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
-        u'karma_app.userprofile': {
+        u'mozan_app.userprofile': {
             'Meta': {'object_name': 'UserProfile'},
             'avatar_original_image': ('django.db.models.fields.files.ImageField', [], {'default': "'default/member-photo.png'", 'max_length': '100'}),
-            'follows': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'followed_by'", 'symmetrical': 'False', 'to': u"orm['karma_app.UserProfile']"}),
+            'follows': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'followed_by'", 'symmetrical': 'False', 'to': u"orm['mozan_app.UserProfile']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True'})
         }
     }
 
-    complete_apps = ['karma_app']
+    complete_apps = ['mozan_app']

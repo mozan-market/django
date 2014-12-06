@@ -1,5 +1,5 @@
 from django.contrib import admin
-from karma_app.models import UserProfile, Post, Image, Category
+from mozan_app.models import UserProfile, Post, Image, Category
 from mptt.admin import MPTTModelAdmin
 
 # Register your models here.

@@ -28,13 +28,13 @@ router.register(r'users', UserViewSet)
 urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'karma_app.views.public'), # root
-    url(r'^users/(?P<username>\w{0,30})/$', 'karma_app.views.users'),
-    url(r'^post/(?P<post_id>\w{0,30})/$', 'karma_app.views.posts'),
-    url(r'^follow$', 'karma_app.views.follow'),
+    url(r'^$', 'mozan_app.views.public'), # root
+    url(r'^users/(?P<username>\w{0,30})/$', 'mozan_app.views.users'),
+    url(r'^post/(?P<post_id>\w{0,30})/$', 'mozan_app.views.posts'),
+    url(r'^follow$', 'mozan_app.views.follow'),
     
-    url(r'^api/posts/$', 'karma_app.views.post_REST_list'),
-    url(r'^api/post/(?P<pk>[0-9]+)/$', 'karma_app.views.post_REST_detail'),
+    url(r'^api/posts/$', 'mozan_app.views.post_REST_list'),
+    url(r'^api/post/(?P<pk>[0-9]+)/$', 'mozan_app.views.post_REST_detail'),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api$', include(router.urls)),
 
