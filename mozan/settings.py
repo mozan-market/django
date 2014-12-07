@@ -49,11 +49,10 @@ from rest_framework.settings import api_settings
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-    'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
-    'UNICODE_JSON': True,
-    'COMPACT_JSON': False,
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ),
+
 
 }
 

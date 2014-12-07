@@ -4,6 +4,8 @@ from django.contrib import admin
 
 from hitcount.views import update_hit_count_ajax
 
+from mozan_app import views
+
 from rest_framework import routers, serializers, viewsets
 from rest_framework.urlpatterns import format_suffix_patterns
 
@@ -33,8 +35,8 @@ urlpatterns = patterns('',
     url(r'^post/(?P<post_id>\w{0,30})/$', 'mozan_app.views.posts'),
     url(r'^follow$', 'mozan_app.views.follow'),
     
-    url(r'^api/posts/$', 'mozan_app.views.post_REST_list'),
-    url(r'^api/post/(?P<pk>[0-9]+)/$', 'mozan_app.views.post_REST_detail'),
+    url(r'^api/posts/$', views.post_REST_list.as_view()),
+    url(r'^api/post/(?P<pk>[0-9]+)/$', views.post_REST_detail.as_view()),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api$', include(router.urls)),
 
