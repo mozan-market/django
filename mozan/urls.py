@@ -35,6 +35,8 @@ urlpatterns = patterns('',
     url(r'^post/(?P<post_id>\w{0,30})/$', 'mozan_app.views.posts'),
     url(r'^follow$', 'mozan_app.views.follow'),
     
+    url(r'^api/users/$', views.UserProfile_REST_List.as_view()),
+    url(r'^api/users/(?P<pk>[0-9]+)/$', views.UserProfile_REST_Detail.as_view()),
     url(r'^api/posts/$', views.post_REST_list.as_view()),
     url(r'^api/post/(?P<pk>[0-9]+)/$', views.post_REST_detail.as_view()),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),

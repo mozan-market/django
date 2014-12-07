@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from mozan_app.forms import AuthenticateForm, UserCreateForm, MozanForm
 from mozan_app.models import Post, Image
-from mozan_app.serializers import PostSerializer
+from mozan_app.serializers import PostSerializer, UserProfileSerializer
 
 from rest_framework import generics
 from rest_framework.renderers import UnicodeJSONRenderer, BrowsableAPIRenderer
@@ -21,6 +21,16 @@ class post_REST_detail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (UnicodeJSONRenderer, BrowsableAPIRenderer,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+
+class UserProfile_REST_List(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserProfileSerializer
+
+
+class UserProfile_REST_Detail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserProfileSerializer
+
 
 def public(request, mozan_form=None):
     mozan_form = mozan_form or MozanForm()
