@@ -5,31 +5,65 @@ from django.http import HttpResponse, Http404
 from django.views.decorators.csrf import csrf_exempt
 
 from mozan_app.forms import AuthenticateForm, UserCreateForm, MozanForm
-from mozan_app.models import Post, Image
-from mozan_app.serializers import PostSerializer, UserProfileSerializer
+from mozan_app.models import Post, Image, UserProfile
+from mozan_app.serializers import PostSerializer, ImageSerializer, UserProfileSerializer
 
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework.renderers import UnicodeJSONRenderer, BrowsableAPIRenderer
 
-class post_REST_list(generics.ListCreateAPIView):
+
+
+class PostList(generics.ListCreateAPIView):
     renderer_classes = (UnicodeJSONRenderer, BrowsableAPIRenderer,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
 
-class post_REST_detail(generics.RetrieveUpdateDestroyAPIView):
+
+class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (UnicodeJSONRenderer, BrowsableAPIRenderer,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-class UserProfile_REST_List(generics.ListAPIView):
-    queryset = User.objects.all()
+
+
+class ImageList(generics.ListCreateAPIView):
+    model = Image
+    serializer_class = ImageSerializer
+    permission_classes = [
+        permissions.AllowAny
+    ]
+
+
+
+class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
+    model = Image
+    serializer_class = ImageSerializer
+    permission_classes = [
+        permissions.AllowAny
+    ]
+
+
+
+class PostImageList(generics.ListAPIView):
+    model = Image
+    serializer_class = ImageSerializer
+    def get_queryset(self):
+        queryset = super(PostImageList, self).get_queryset()
+        return queryset.filter(post__pk=self.kwargs.get('pk'))
+
+
+
+class UserProfileList(generics.ListAPIView):
+    queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
 
 
-class UserProfile_REST_Detail(generics.RetrieveAPIView):
+
+class UserProfileDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
+
 
 
 def public(request, mozan_form=None):
@@ -47,14 +81,13 @@ def public(request, mozan_form=None):
 
 from django.db.models import Count
 from django.http import Http404
- 
 def get_latest(user):
     try:
         return user.post_set.order_by('-id')[0]
     except IndexError:
         return ""
- 
- 
+
+
 
 def users(request, username="", mozan_form=None):
     if username:
@@ -69,6 +102,8 @@ def users(request, username="", mozan_form=None):
             images.extend(list(Image.objects.filter(post=post).order_by('id')[:1]))
   
         return render(request, 'user.html', {'user': user, 'posts': posts, 'images': images, })
+
+
 
 def posts(request, post_id="", mozan_form=None):
     if post_id:
@@ -91,7 +126,6 @@ def index(request, auth_form=None, user_form=None):
         posts_self = Mozan.objects.filter(user=user.id)
         posts_buddies = Mozan.objects.filter(user__userprofile__in=user.profile.follows.all)
         posts = posts_self | posts_buddies
- 
         return render(request,
                       'buddies.html',
                       {'mozan_form': mozan_form, 
@@ -102,11 +136,12 @@ def index(request, auth_form=None, user_form=None):
         # User is not logged in
         auth_form = auth_form or AuthenticateForm()
         user_form = user_form or UserCreateForm()
- 
         return render(request,
                       'home.html',
                       {'auth_form': auth_form, 
                        'user_form': user_form, })
+
+
 
 def login_view(request):
     if request.method == 'POST':
@@ -120,9 +155,13 @@ def login_view(request):
             return index(request, auth_form=form)
     return redirect('/')
 
+
+
 def logout_view(request):
     logout(request)
     return redirect('/')
+
+
 
 def signup(request):
     user_form = UserCreateForm(data=request.POST)
@@ -137,9 +176,10 @@ def signup(request):
         else:
             return index(request, user_form=user_form)
     return redirect('/')
-
 from django.contrib.auth.decorators import login_required
  
+
+
 @login_required
 def submit(request):
     if request.method == "POST":
@@ -155,8 +195,8 @@ def submit(request):
     return redirect('/')
 
 
+
 from django.core.exceptions import ObjectDoesNotExist
- 
 @login_required
 def follow(request):
     if request.method == "POST":

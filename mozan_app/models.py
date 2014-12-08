@@ -6,19 +6,17 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, ResizeToFit, Adjust
 from mptt.models import MPTTModel, TreeForeignKey
 
+  
 
-
-    
 class Category(MPTTModel):
     name = models.CharField(max_length=50, unique=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
-
     def __unicode__(self):
         return self.name 
-    
     class MPTTMeta:
         order_insertion_by = ['name']
-    
+  
+
 
 class Post(models.Model):
     content = models.CharField(max_length=140)
@@ -29,13 +27,14 @@ class Post(models.Model):
     def __unicode__(self):
         return self.content 
 
-class Image(models.Model):
-	post = models.ForeignKey(Post)
 
-	original_image = models.ImageField(upload_to='post_images/', 
-                              default = '',)
+
+class Image(models.Model):
+	post = models.ForeignKey(Post, related_name='images')
+	original_image = models.ImageField(upload_to='post_images', default = '',)
 	image_main_page = ImageSpecField(source='original_image', processors=[ResizeToFill(236, 180), Adjust(contrast=1.2, sharpness=1.1)], format='JPEG', options={'quality': 60})
 	image_post_page = ImageSpecField(source='original_image', processors=[ResizeToFit(480, 480)], format='JPEG', options={'quality': 75})
+
 
 
 class UserProfile(models.Model):
@@ -45,18 +44,14 @@ class UserProfile(models.Model):
     avatar_30 = ImageSpecField(source='avatar_original_image', processors=[ResizeToFill(30, 30), Adjust(contrast=1.2, sharpness=1.1)], format='JPEG', options={'quality': 80})
     def __unicode__(self):
         return self.user.username 
-
-
 User.profile = property(lambda u: UserProfile.objects.get_or_create(user=u)[0])
 
 
 
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
-
 @receiver(post_delete, sender=Image)
 def image_post_delete_handler(sender, **kwargs):
     image = kwargs['instance']
     storage, path = image.original_image.storage, image.original_image.path
     storage.delete(path)
-
