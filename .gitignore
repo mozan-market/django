@@ -1,7 +1,7 @@
 *.pyc
-*.swp
+*.sw?
 *.db
 media/CACHE/*
 mozan/settings_local.py
 .idea/*
-
+.DS_Store
