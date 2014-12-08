@@ -1,5 +1,6 @@
 *.pyc
 *.swp
+*.db
 media/CACHE/*
 mozan/settings_local.py
 
