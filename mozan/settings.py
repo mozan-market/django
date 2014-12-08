@@ -1,9 +1,7 @@
 """
 Django settings for mozan project.
-
 For more information on this file, see
 https://docs.djangoproject.com/en/1.6/topics/settings/
-
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
@@ -85,17 +83,9 @@ WSGI_APPLICATION = 'mozan.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+# see local settings
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django',
-        'USER': 'django',
-        'PASSWORD': 'rDGfyoJZ3g',
-        'HOST': 'localhost',
-        'PORT': '',
-    }
-}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -121,3 +111,7 @@ MEDIA_URL = '/media/'
 
 #LOGIN_URL = '/'
 TEMPLATE_DIRS = ( os.path.join(BASE_DIR, 'templates'), )
+
+# Import settings
+from settings_local import *
+
