@@ -12,10 +12,12 @@ class ImageSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     images = serializers.HyperlinkedIdentityField('images', view_name='postimage-list')
+    owner = serializers.CharField(source='owner.username', read_only=True)
+    category = serializers.CharField(source='category.name', )
 
     class Meta:
         model = Post
-        fields = ('id', 'content', 'user', 'category', 'images')
+        fields = ('id', 'content', 'owner', 'category', 'images')
 
     def create(self, validated_attrs):
         return Post.objects.create(**validated_attrs)
@@ -27,7 +29,8 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    posts = serializers.HyperlinkedIdentityField('posts', view_name='userpost-list', lookup_field='username')
+    posts = serializers.HyperlinkedIdentityField('posts', view_name='userpost-list',
+                                                 lookup_field='username')
 
     class Meta:
         model = UserProfile

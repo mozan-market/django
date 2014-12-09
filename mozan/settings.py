@@ -38,10 +38,11 @@ INSTALLED_APPS = (
     'mozan_app',
     'mptt',             #Categories
     'rest_framework',   #DRF
+    'rest_framework.authtoken',  # Token authorization
     'haystack',         #search
     'hitcount',         #count post views
-
 )
+
 from rest_framework.settings import api_settings
 
 REST_FRAMEWORK = {
@@ -50,9 +51,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ),
-
-
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
 }
+
 
 HAYSTACK_CONNECTIONS = {
     'default': {

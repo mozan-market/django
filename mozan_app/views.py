@@ -1,30 +1,33 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
-from django.http import HttpResponse, Http404
-from django.views.decorators.csrf import csrf_exempt
 
-from mozan_app.forms import AuthenticateForm, UserCreateForm, MozanForm
-from mozan_app.models import Post, Image, UserProfile
-from mozan_app.serializers import PostSerializer, ImageSerializer, UserProfileSerializer
+from .forms import AuthenticateForm, UserCreateForm, MozanForm
+from .models import Post, Image, UserProfile
+from .serializers import PostSerializer, ImageSerializer, UserProfileSerializer
+from .permissions import IsOwnerOrReadOnly
+
 
 from rest_framework import generics, permissions
 from rest_framework.renderers import UnicodeJSONRenderer, BrowsableAPIRenderer
-
+from rest_framework.authentication import TokenAuthentication
 
 
 class PostList(generics.ListCreateAPIView):
     renderer_classes = (UnicodeJSONRenderer, BrowsableAPIRenderer,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 
 class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     renderer_classes = (UnicodeJSONRenderer, BrowsableAPIRenderer,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-
 
 
 class ImageList(generics.ListCreateAPIView):
@@ -35,14 +38,12 @@ class ImageList(generics.ListCreateAPIView):
     ]
 
 
-
 class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
     model = Image
     serializer_class = ImageSerializer
     permission_classes = [
         permissions.AllowAny
     ]
-
 
 
 class PostImageList(generics.ListAPIView):
@@ -53,17 +54,20 @@ class PostImageList(generics.ListAPIView):
         return queryset.filter(post__pk=self.kwargs.get('pk'))
 
 
-
 class UserProfileList(generics.ListAPIView):
     queryset = UserProfile.objects.all()
     serializer_class = UserProfileSerializer
-
 
 
 class UserProfileDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
 
+
+    def pre_save(self, obj):
+        """Force author to the current user on save"""
+        obj.owner = self.request.user
+        return super(PostMixin, self).pre_save(obj)
 
 
 def public(request, mozan_form=None):
@@ -79,7 +83,6 @@ def public(request, mozan_form=None):
 
 
 
-from django.db.models import Count
 from django.http import Http404
 def get_latest(user):
     try:
