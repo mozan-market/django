@@ -4,16 +4,14 @@ from mozan_app.models import Post, UserProfile, Category, Image
 
 
 class ImageSerializer(serializers.ModelSerializer):
-    image = serializers.Field('image.url')
-
     class Meta:
         model = Image
-
+        fields = ('id', 'original_image')
 
 class PostSerializer(serializers.ModelSerializer):
-    images = serializers.HyperlinkedIdentityField('images', view_name='postimage-list')
     owner = serializers.CharField(source='owner.username', read_only=True)
-    category = serializers.CharField(source='category.name', )
+    # Need to solve categories issue. The way they are represented and viewed.
+    # category = serializers.ChoiceField(source='category.name', )
 
     class Meta:
         model = Post
