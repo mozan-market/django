@@ -47,7 +47,7 @@ urlpatterns = patterns('',
     url(r'^api/posts/$', views.PostList.as_view()),
     url(r'^api/post/(?P<pk>[0-9]+)/$', views.PostDetail.as_view()),
     url(r'^api/post/(?P<pk>\d+)/images$', views.PostImageList.as_view(), name='postimage-list'),
-    url(r'^api/api/auth/token/', token_view.obtain_auth_token),
+    url(r'^api/auth/token/', token_view.obtain_auth_token),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/$', include(router.urls)),
 
