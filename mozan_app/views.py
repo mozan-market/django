@@ -43,8 +43,7 @@ class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
 
-
-class PostImageList(generics.ListAPIView):
+class PostImageList(generics.ListCreateAPIView):
     model = Image
     serializer_class = ImageSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
@@ -54,7 +53,7 @@ class PostImageList(generics.ListAPIView):
         return queryset.filter(post__pk=self.kwargs.get('pk'))
 
 
-class UserList(generics.ListAPIView):
+class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsStaffOrTargetUser,)
@@ -63,7 +62,7 @@ class UserList(generics.ListAPIView):
         serializer.save(owner=self.request.user)
 
 
-class UserDetail(generics.RetrieveAPIView):
+class UserDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsStaffOrTargetUser,)
@@ -71,10 +70,10 @@ class UserDetail(generics.RetrieveAPIView):
     def pre_save(self, obj):
         """Force author to the current user on save"""
         # obj.owner = self.request.user
-        #return super(PostMixin, self).pre_save(obj)
+        # return super(PostMixin, self).pre_save(obj)
 
 
-class UserProfileDetail(generics.ListAPIView):
+class UserProfileDetail(generics.ListCreateAPIView):
     model = UserProfile
     serializer_class = UserProfileSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsStaffOrTargetUser,)
@@ -84,7 +83,7 @@ class UserProfileDetail(generics.ListAPIView):
         return queryset.filter(user=self.kwargs.get('pk'))
 
         # def pre_save(self, obj):
-        #""" Force author to the current user on save """
+        # """ Force author to the current user on save """
         #obj.owner = self.request.user
         #return super(PostMixin, self).pre_save(obj)
 
