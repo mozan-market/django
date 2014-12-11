@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 from .forms import AuthenticateForm, UserCreateForm, MozanForm
 from .models import Post, Image, UserProfile
-from .serializers import PostSerializer, ImageSerializer, UserProfileSerializer
-from .permissions import IsOwnerOrReadOnly
+from .serializers import PostSerializer, ImageSerializer, UserProfileSerializer, UserSerializer
+from .permissions import IsOwnerOrReadOnly, IsStaffOrTargetUser
 
 
 from rest_framework import generics, permissions
@@ -33,41 +33,62 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
 class ImageList(generics.ListCreateAPIView):
     model = Image
     serializer_class = ImageSerializer
-    permission_classes = [
-        permissions.AllowAny
-    ]
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+
 
 
 class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
     model = Image
     serializer_class = ImageSerializer
-    permission_classes = [
-        permissions.AllowAny
-    ]
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+
 
 
 class PostImageList(generics.ListAPIView):
     model = Image
     serializer_class = ImageSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+
     def get_queryset(self):
         queryset = super(PostImageList, self).get_queryset()
         return queryset.filter(post__pk=self.kwargs.get('pk'))
 
 
-class UserProfileList(generics.ListAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
-
-
-class UserProfileDetail(generics.RetrieveAPIView):
+class UserList(generics.ListAPIView):
     queryset = User.objects.all()
-    serializer_class = UserProfileSerializer
+    serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsStaffOrTargetUser,)
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsStaffOrTargetUser,)
 
     def pre_save(self, obj):
         """Force author to the current user on save"""
-        obj.owner = self.request.user
-        return super(PostMixin, self).pre_save(obj)
+        # obj.owner = self.request.user
+        #return super(PostMixin, self).pre_save(obj)
+
+
+class UserProfileDetail(generics.ListAPIView):
+    model = UserProfile
+    serializer_class = UserProfileSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsStaffOrTargetUser,)
+
+    def get_queryset(self):
+        queryset = super(UserProfileDetail, self).get_queryset()
+        return queryset.filter(user=self.kwargs.get('pk'))
+
+        # def pre_save(self, obj):
+        #""" Force author to the current user on save """
+        #obj.owner = self.request.user
+        #return super(PostMixin, self).pre_save(obj)
+
+
 
 
 def public(request, mozan_form=None):
@@ -80,7 +101,6 @@ def public(request, mozan_form=None):
                   'public.html',
                   {'mozan_form': mozan_form, 'next_url': '/',
                    'posts': posts, 'username': request.user.username, 'images': images,})
-
 
 
 from django.http import Http404

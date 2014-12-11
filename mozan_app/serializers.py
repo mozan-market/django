@@ -1,6 +1,6 @@
 from django.forms import widgets
 from rest_framework import serializers
-from mozan_app.models import Post, UserProfile, Category, Image
+from mozan_app.models import Post, UserProfile, Category, Image, User
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -26,10 +26,30 @@ class PostSerializer(serializers.ModelSerializer):
         return instance
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'first_name', 'last_name', 'email', 'profile')
+
+    def create(self, validated_attrs):
+        return User.objects.create(**validated_attrs)
+
+    def update(self, instance, validated_attrs):
+        instance.content = validated_attrs.get('content', instance.content)
+        instance.save()
+        return instance
+
 class UserProfileSerializer(serializers.ModelSerializer):
-    posts = serializers.HyperlinkedIdentityField('posts', view_name='userpost-list',
-                                                 lookup_field='username')
+    user = serializers.CharField(source='user.username', read_only=True)
 
     class Meta:
         model = UserProfile
-        fields = ('id', 'user', 'posts',)
+        fields = ('user', 'avatar_original_image')
+
+    def create(self, validated_attrs):
+        return UserProfile.objects.create(**validated_attrs)
+
+    def update(self, instance, validated_attrs):
+        instance.content = validated_attrs.get('content', instance.content)
+        instance.save()
+        return instance

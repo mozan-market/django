@@ -42,8 +42,10 @@ urlpatterns = patterns('',
 
     url(r'^api/image/(?P<pk>\d+)$', views.ImageDetail.as_view(), name='image-detail'),
     url(r'^api/image/list/$', views.ImageList.as_view(), name='image-list'),
-    url(r'^api/user/list/$', views.UserProfileList.as_view()),
-    url(r'^api/user/(?P<pk>[0-9]+)/$', views.UserProfileDetail.as_view()),
+    url(r'^api/user/list/$', views.UserList.as_view()),
+    url(r'^api/user/(?P<pk>\d+)/$', views.UserDetail.as_view()),
+    url(r'^api/user/(?P<pk>\d+)/profile$', views.UserProfileDetail.as_view()),
+
     url(r'^api/post/list/$', views.PostList.as_view()),
     url(r'^api/post/(?P<pk>[0-9]+)/$', views.PostDetail.as_view()),
     url(r'^api/post/(?P<pk>\d+)/images$', views.PostImageList.as_view(), name='postimage-list'),

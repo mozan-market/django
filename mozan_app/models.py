@@ -42,7 +42,7 @@ class Image(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, related_name='profile')
     follows = models.ManyToManyField('self', related_name='followed_by', symmetrical=False)
     avatar_original_image = models.ImageField(upload_to='avatars/',
                                               default='default/member-photo.png')
