@@ -26,9 +26,9 @@
 						<a class="karma">{% get_hit_count for post %}</a>
                     </div>
                 <div class="postAuthor">
-                    <a href="/users/{{ post.user.username }}">
-                        <img class="avatar" src="{{ post.user.profile.avatar_30.url }}">
-                        <span class="name">{{ post.user.first_name }}</span>
+                    <a href="/user/{{ post.owner.username }}">
+                        <img class="avatar" src="{{ post.owner.profile.avatar_30.url }}">
+                        <span class="name">{{ post.owner.first_name }}</span>
                     </a>
                     <div class="category"> {{ post.category }}</div>    
 

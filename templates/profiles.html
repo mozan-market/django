@@ -10,7 +10,7 @@
         <h1>Пользователи</h1>
         {% for user, karma in obj %}
         <div class="karmaWrapper">
-            <a href="/users/{{ user.username }}">
+            <a href="/user/{{ user.username }}">
                 <img class="avatar" src="{{ user.profile.gravatar_url }}">
                 <span class="name">{{ user.first_name }}</span>
             </a>

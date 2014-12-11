@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from .forms import AuthenticateForm, UserCreateForm, MozanForm
 from .models import Post, Image, UserProfile
 from .serializers import PostSerializer, ImageSerializer, UserProfileSerializer, UserSerializer
-from .permissions import IsOwnerOrReadOnly, IsStaffOrTargetUser
+from .permissions import IsOwnerOrReadOnly, IsStaffOrTargetUser, IsOwnerOfParentPostOrReadOnly
 
 
 from rest_framework import generics, permissions
@@ -40,13 +40,13 @@ class ImageList(generics.ListCreateAPIView):
 class ImageDetail(generics.RetrieveUpdateDestroyAPIView):
     model = Image
     serializer_class = ImageSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOfParentPostOrReadOnly)
 
 
 class PostImageList(generics.ListCreateAPIView):
     model = Image
     serializer_class = ImageSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOfParentPostOrReadOnly)
 
     def get_queryset(self):
         queryset = super(PostImageList, self).get_queryset()
@@ -118,7 +118,7 @@ def users(request, username="", mozan_form=None):
             user = User.objects.get(username=username)
         except User.DoesNotExist:
             raise Http404
-        posts = Post.objects.filter(user=user.id)
+        posts = Post.objects.filter(owner=user.id)
         images = []
         for post in posts:
             images.extend(list(Image.objects.filter(post=post).order_by('id')[:1]))

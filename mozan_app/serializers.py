@@ -4,18 +4,20 @@ from mozan_app.models import Post, UserProfile, Category, Image, User
 
 
 class ImageSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Image
-        fields = ('id', 'original_image')
+        fields = ('post', 'id', 'original_image')
 
 class PostSerializer(serializers.ModelSerializer):
-    owner = serializers.CharField(source='owner.username', read_only=True)
+    # owner = serializers.CharField(source='owner.username', )
+    #user = serializers.PrimaryKeyRelatedField()
     # Need to solve categories issue. The way they are represented and viewed.
     # category = serializers.ChoiceField(source='category.name', )
 
     class Meta:
         model = Post
-        fields = ('id', 'content', 'owner', 'category', 'images')
+        fields = ('id', 'content', 'owner', 'category', 'images', )
 
     def create(self, validated_attrs):
         return Post.objects.create(**validated_attrs)
@@ -41,10 +43,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserProfileSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source='user.username', read_only=True)
-
     class Meta:
         model = UserProfile
-        fields = ('user', 'avatar_original_image')
+        fields = ('id', 'user', 'avatar_original_image')
 
     def create(self, validated_attrs):
         return UserProfile.objects.create(**validated_attrs)
