@@ -71,7 +71,7 @@ class UserDetail(generics.RetrieveAPIView):
     def pre_save(self, obj):
         """Force author to the current user on save"""
         # obj.owner = self.request.user
-        #return super(PostMixin, self).pre_save(obj)
+        # return super(PostMixin, self).pre_save(obj)
 
 
 class UserProfileDetail(generics.ListAPIView):
@@ -84,7 +84,7 @@ class UserProfileDetail(generics.ListAPIView):
         return queryset.filter(user=self.kwargs.get('pk'))
 
         # def pre_save(self, obj):
-        #""" Force author to the current user on save """
+        # """ Force author to the current user on save """
         #obj.owner = self.request.user
         #return super(PostMixin, self).pre_save(obj)
 
