@@ -5,21 +5,18 @@
 	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
 	<script type="text/javascript">
-    $(document).ready(function() {
-        {%
-            get_hit_count_javascript;
-            for post %}
-        }
-        )
+        $(document).ready(function() {
+            {% get_hit_count_javascript for post %}
+            });
     </script>
 
 {% endblock %}
 
-{% block login %}   
+{% block login %}
 {% endblock %}
 
 {% block content %}
-    
+
     <div class="post">
         <div class="postWrapper">
             {% for image in images  %}
@@ -38,13 +35,13 @@
                         <img class="avatar" src="{{ post.owner.profile.avatar_30.url }}">
                         <span class="name">{{ post.owner.first_name }}</span>
                     </a>
-                    <div class="category">Категория: {{ post.category }}</div>    
+                    <div class="category">Категория: {{ post.category }}</div>
 
                 </div>
-                
-                
+
+
             </div>
-            
+
         </div>
     </div>
 {% endblock %}

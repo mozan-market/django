@@ -62,6 +62,6 @@ class BlacklistUserAgentAdmin(admin.ModelAdmin):
     pass
  
 admin.site.register(Hit, HitAdmin)
-admin.site.register(HitCount, HitCountAdmin) 
+admin.site.register(HitCount, HitCountAdmin)
 admin.site.register(BlacklistIP, BlacklistIPAdmin)
 admin.site.register(BlacklistUserAgent, BlacklistUserAgentAdmin)

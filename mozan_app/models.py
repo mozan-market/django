@@ -12,6 +12,9 @@ class Category(MPTTModel):
     name = models.CharField(max_length=50, unique=True)
     parent = TreeForeignKey('self', null=True, blank=True, related_name='children')
 
+    class Meta:
+        verbose_name_plural = "Categories"
+
     def __unicode__(self):
         return self.name
 

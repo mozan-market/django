@@ -8,6 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import generic
 
 from django.dispatch import Signal
+from mozan_app.models import Post
 
 AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
@@ -15,8 +16,8 @@ AUTH_USER_MODEL = getattr(settings, 'AUTH_USER_MODEL', 'auth.User')
 
 delete_hit_count = Signal(providing_args=['save_hitcount',])
 
-def delete_hit_count_callback(sender, instance, 
-        save_hitcount=False, **kwargs):
+def delete_hit_count_callback(sender, instance,
+                              save_hitcount=False, **kwargs):
     '''
     Custom callback for the Hit.delete() method.
 
@@ -127,7 +128,6 @@ class HitCount(models.Model):
         
         For example: hits_in_last(days=7).
 
-        Accepts days, seconds, microseconds, milliseconds, minutes, 
         hours, and weeks.  It's creating a datetime.timedelta object.
         '''
         assert kwargs, "Must provide at least one timedelta arg (eg, days=1)"
