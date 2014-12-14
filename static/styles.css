@@ -157,8 +157,16 @@ header div.wrapper #btnLogOut {
     overflow: auto;
 }
 #content div.wrapper div.postWrapper .postBadges {
-    font-size: 11px;
+    font-size: 9px;
     padding: 7px 14px;
+    color: #777;
+    font-weight: bold;
+}
+#content div.wrapper div.postWrapper .hit-count {
+    background: url(/static/img/viewsicon.png) no-repeat 0% 50%;
+    padding-left: 16px;
+    color: #777;
+
 }
 
 #content div.wrapper div.postWrapper .postAuthor {

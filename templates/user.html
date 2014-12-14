@@ -1,56 +1,61 @@
 {% extends "base.html" %}
+{% load hitcount_tags %}
+
 {% block login %}
 
 {% endblock %}
- 
+
 {% block content %}
-    <div class="panel left">
-        <h1>{{ user.first_name }}</h1>
-        <div class="userWrapper">
-            <a href="/users/{{ user.username }}">
-                <img class="avatar" src="{{ user.profile.avatar_30.url }}">
-                <span class="name">{{ user.first_name }}</span>
-            </a>
-                @{{ user.username }}
-                <p>Количество объявлений: {{ posts.count }}</p>
-                <p class="spacing">Репутация: {{ user.profile.follows.all.count }} </p>
-                <p class="spacing">Отзывы: {{ user.profile.followed_by.all.count }} </p>
-            {% if follow %}
-            <form action="/follow" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="follow" value="{{ user.id }}">
-                <input type="submit" value="Follow">
-            </form>
-            {% endif %}
-        </div>
+<div class="panel left">
+    <h1>{{ user.first_name }}</h1>
+
+    <div class="userWrapper">
+        <a href="/users/{{ user.username }}">
+            <img class="avatar" src="{{ user.profile.avatar_30.url }}">
+            <span class="name">{{ user.first_name }}</span>
+        </a>
+        @{{ user.username }}
+        <p>Количество объявлений: {{ posts.count }}</p>
+
+        <p class="spacing">Репутация: {{ user.profile.follows.all.count }} </p>
+
+        <p class="spacing">Отзывы: {{ user.profile.followed_by.all.count }} </p>
+        {% if follow %}
+        <form action="/follow" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="follow" value="{{ user.id }}">
+            <input type="submit" value="Follow">
+        </form>
+        {% endif %}
     </div>
- 
-    <div class="panel posts">
-        {% for post in posts %}
-        <div class="postWrapper">
-            {% for image in images %}
-				{% if image.post = post %}
-				<a href="/post/{{post.pk}}">
-						<img class ="postImage" src="{{ image.image_main_page.url }}">
-					</a>
-				{% endif %}
-			{% endfor %}
-            <div class="postMeta">
-                <div class="postDescription">
-                    {{ post.content }}
-                </div>
-                <div class="postBadges">
-                        <a class="comments">10</a>
-                        <a class="karma">+14</a>
-                    </div>
-                <div class="postAuthor">
-                    <div class="category">Категория: {{ post.category }}</div>    
-                </div>
-                
-                
-            </div>
-            
-        </div>
+</div>
+
+<div class="panel posts">
+    {% for post in posts %}
+    <div class="postWrapper">
+        {% for image in images %}
+        {% if image.post = post %}
+        <a href="/post/{{post.pk}}">
+            <img class="postImage" src="{{ image.image_main_page.url }}">
+        </a>
+        {% endif %}
         {% endfor %}
+        <div class="postMeta">
+            <div class="postDescription">
+                {{ post.content }}
+            </div>
+            <div class="postBadges">
+                <a class="hit-count">{% get_hit_count for post %}</a>
+
+            </div>
+            <div class="postAuthor">
+                <div class="category">Категория: {{ post.category }}</div>
+            </div>
+
+
+        </div>
+
     </div>
+    {% endfor %}
+</div>
 {% endblock %}
