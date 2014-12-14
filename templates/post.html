@@ -2,9 +2,9 @@
 {% load hitcount_tags %}
 
 {% block head %}
-	<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-	<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
-	<script type="text/javascript">
+    <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script type="text/javascript">
         $(document).ready(function() {
             {% get_hit_count_javascript for post %}
             });
@@ -27,9 +27,9 @@
                     {{ post.content }}
                 </div>
                 <div class="postBadges">
-                        <a class="comments">10</a>
-						<a class="karma">{% get_hit_count for post %}</a>
-                    </div>
+                    <a class="comments">10</a>
+                    <a class="karma">{% get_hit_count for post %}</a>
+                </div>
                 <div class="postAuthor">
                     <a href="/user/{{ post.owner.username }}">
                         <img class="avatar" src="{{ post.owner.profile.avatar_30.url }}">
