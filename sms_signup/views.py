@@ -69,7 +69,7 @@ class RegistrationView(View):
                         'api_secret': NEXMO_SECRET_KEY,
                         'from': 'moZan',
                         'to': phone,
-                        'text': sms_cod,
+                        'text': sms_code,
                     }
                 sms = NexmoMessage(msg)
                 sms.set_text_info(msg['text'])
