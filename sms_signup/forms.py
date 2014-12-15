@@ -15,8 +15,7 @@ PHONE_MAX_LENGTH = 14
 ACTIVATION_CODE_MAX_LENGTH = 30
 
 PHONE_LABEL = _(u"Номер телефона в международном формате")
-PHONE_ERROR = _(
-    u"Укажите номер телефона в международном формате (только цифры)")
+PHONE_ERROR = _(u"Укажите номер телефона в международном формате (только цифры)")
 USER_ALREADY_EXISTS = _(u"Пользователь с таким телефоном уже зарегистрирован")
 WRONG_ACTIVATION_CODE = _(u"Неверный код активации")
 WRONG_PASSWORD = _(u"Неверный пароль")
@@ -104,7 +103,7 @@ class ActivationForm(forms.Form):
         try:
             worker_sms_code = ActivationSMSCode.objects.get(
                 sms_code=self.cleaned_data['sms_code'],
-                phone=self.cleaned_data['username']
+                phone=self.data['username']
             )
         except ActivationSMSCode.DoesNotExist:
             raise forms.ValidationError(WRONG_ACTIVATION_CODE)

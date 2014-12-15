@@ -21,7 +21,7 @@ router.register(r'Images', ImageViewSet)
 urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', 'mozan_app.views.public'), # root
+    url(r'^$', 'mozan_app.views.public', name='home'), # root
     url(r'^user/(?P<username>\w{0,30})/$', 'mozan_app.views.users'),
     url(r'^post/(?P<post_id>\w{0,30})/$', 'mozan_app.views.posts'),
     url(r'^follow$', 'mozan_app.views.follow'),

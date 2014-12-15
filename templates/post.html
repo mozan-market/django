@@ -27,7 +27,7 @@
                     {{ post.content }}
                 </div>
                 <div class="postBadges">
-                    <a class="hit-count">{% get_hit_count for post %}</a>
+                    <span class="hit-count">{% get_hit_count for post %}</span>
                 </div>
                 <div class="postAuthor">
                     <a href="/user/{{ post.owner.username }}">

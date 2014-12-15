@@ -148,12 +148,13 @@ class ActivationView(View):
                     worker_sms_code.is_activated = True
                     worker_sms_code.save()
                     # Sends the password in the sms
-                    api.send_sms(
-                        body=" ".join(["Password:", password]),
-                        from_phone=settings.PHONE_NUMBER_FROM,
-                        to=[phone],
-                        flash=True
-                    )
+                    # Should send to api/auth/token to get token
+                    # api.send_sms(
+                    #     body=" ".join(["Password:", password]),
+                    #     from_phone=settings.PHONE_NUMBER_FROM,
+                    #     to=[phone],
+                    #     flash=True
+                    # )
 
                     messages.add_message(
                         request,
