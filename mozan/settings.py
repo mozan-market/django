@@ -41,7 +41,7 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',  # Token authorization
     'haystack',         #search
     'hitcount',         #count post views
-
+    'sms_signup',
 )
 
 from rest_framework.settings import api_settings

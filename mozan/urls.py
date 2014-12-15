@@ -25,6 +25,8 @@ urlpatterns = patterns('',
     url(r'^post/(?P<post_id>\w{0,30})/$', 'mozan_app.views.posts'),
     url(r'^follow$', 'mozan_app.views.follow'),
 
+    url(r'^nexmo/', include('nexmo.urls')),
+
     url(r'^api/image/(?P<pk>\d+)$', views.ImageDetail.as_view(), name='image-detail'),
     url(r'^api/image/list/$', views.ImageList.as_view(), name='image-list'),
     url(r'^api/user/list/$', views.UserList.as_view(), name='user-list'),
@@ -33,7 +35,7 @@ urlpatterns = patterns('',
 
     url(r'^api/post/list/$', views.PostList.as_view(), name='post-list'),
     url(r'^api/post/(?P<pk>[0-9]+)/$', views.PostDetail.as_view()),
-    url(r'^api/post/(?P<pk>\d+)/images$', views.PostImageList.as_view(), name='postimage-list'),
+    url(r'^api/post/(?P<pk>\d+)/images/$', views.PostImageList.as_view(), name='postimage-list'),
     url(r'^api/auth/token/', token_view.obtain_auth_token),
     url(r'^api/auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^api/$', include(router.urls)),
