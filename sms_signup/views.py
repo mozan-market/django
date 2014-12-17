@@ -10,16 +10,23 @@ from django.contrib.auth.models import User
 from django.utils.timezone import utc
 from django.core.urlresolvers import reverse
 
+import string
+import random
+import datetime
+from datetime import timedelta
 from nexmomessage import NexmoMessage
 
 from .forms import RegistrationForm, ActivationForm, LoginForm
 from .models import ActivationSMSCode
 from .backend import SMSAuthBackend
+from .serializers import SMSSerializer
 
-from random_words import RandomWords
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
-import datetime
-from datetime import timedelta
+from rest_framework.renderers import UnicodeJSONRenderer, BrowsableAPIRenderer
+from rest_framework.authentication import TokenAuthentication
+
 
 
 ACTIVATION_ALREADY_HAS_BEEN = _(u'Активация уже производилась')
@@ -31,6 +38,70 @@ ACCOUNT_ACTIVATED = _(u"Ваш аккаунт был активирован. С�
 ACTIVATION_PERIOD = 2 # days
 NEXMO_API_KEY ='5214868e'
 NEXMO_SECRET_KEY = '75fbcd18'
+
+
+def code_generator(size=6, chars=string.digits):
+    return ''.join(random.choice(chars) for _ in range(size))
+
+
+class RegistrationApi(APIView):
+
+    """
+    User registration
+    """
+
+    def get(self, request, *args, **kwargs):
+        message='POST your number'
+        return Response(message)
+
+    def post(self, request, format=None):
+        serializer = SMSSerializer(data=request.DATA)
+        if serializer.is_valid(raise_exception=True):
+            phone = serializer.cleaned_data['phone']
+            # Genarates the random code for the sms code
+            sms_code = code_generator()
+
+            # Creates the record with the random
+            # activation code and the phone number
+            ActivationSMSCode.objects.create(
+                sms_code=sms_code,
+                phone=phone,
+                sms_code_init_time=datetime.datetime.utcnow().replace(tzinfo=utc)
+            )
+
+            try:
+                msg = {
+                        'reqtype': 'json',
+                        'api_key': NEXMO_API_KEY,
+                        'api_secret': NEXMO_SECRET_KEY,
+                        'from': 'moZan',
+                        'to': phone,
+                        'text': sms_code,
+                    }
+                sms = NexmoMessage(msg)
+                sms.set_text_info(msg['text'])
+
+                # Sends sms message with the random word
+                sms.send_request()
+
+            except Exception, e:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    SEND_MESSAGE_ERROR
+                )
+                return HttpResponseRedirect(reverse("signup"))
+
+            return HttpResponseRedirect(
+                reverse('signup_activation',
+                    kwargs={
+                        'phone': form.cleaned_data['username']
+                    }
+                )
+            )
+
+        return Response(serializer.errors)
+
 
 class RegistrationView(View):
 
@@ -50,16 +121,14 @@ class RegistrationView(View):
         if form.is_valid():
             phone = form.cleaned_data['username']
             # Genarates the random word for the sms code
-            random_word = RandomWords()
-            sms_code = random_word.random_word()
+            sms_code = code_generator()
 
             # Creates the record with the random 
             # activation word and the phone number
             ActivationSMSCode.objects.create(
                 sms_code=sms_code,
                 phone=phone,
-                sms_code_init_time=datetime.datetime.utcnow().replace(
-                    tzinfo=utc)
+                sms_code_init_time=datetime.datetime.utcnow().replace(tzinfo=utc)
             )
 
             try:
@@ -69,7 +138,7 @@ class RegistrationView(View):
                         'api_secret': NEXMO_SECRET_KEY,
                         'from': 'moZan',
                         'to': phone,
-                        'text': sms_code,
+                        'text': 'Ваш код: ' + sms_code,
                     }
                 sms = NexmoMessage(msg)
                 sms.set_text_info(msg['text'])

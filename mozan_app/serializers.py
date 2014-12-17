@@ -1,4 +1,3 @@
-from django.forms import widgets
 from rest_framework import serializers
 from mozan_app.models import Post, UserProfile, Category, Image, User
 
@@ -45,6 +44,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ('name',)
+
 
 class PostSerializer(serializers.ModelSerializer):
     owner = UserSerializer(required=False)

@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from mozan_app import views
 from mozan_app.viewsets import UserViewSet, PostViewSet, ImageViewSet
-from sms_signup.views import RegistrationView, ActivationView
+from sms_signup.views import RegistrationApi, RegistrationView, ActivationView
 from hitcount.views import update_hit_count_ajax
 from rest_framework import routers
 from rest_framework.authtoken import views as token_view
@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^post/(?P<post_id>\w{0,30})/$', 'mozan_app.views.posts'),
     url(r'^follow$', 'mozan_app.views.follow'),
 
+    url(r'^api/registration/$', RegistrationApi.as_view(), name="registration"),
     url(r'^api/image/(?P<pk>\d+)$', views.ImageDetail.as_view(), name='image-detail'),
     url(r'^api/image/list/$', views.ImageList.as_view(), name='image-list'),
     url(r'^api/user/list/$', views.UserList.as_view(), name='user-list'),
